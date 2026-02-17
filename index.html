@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Act Article 12/19 Infrastructure Readiness Scorecard</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0a1628;
+    --navy-mid: #0f2040;
+    --blue: #1a4480;
+    --blue-bright: #2563eb;
+    --blue-glow: #3b82f6;
+    --ice: #e8f0fe;
+    --ice-mid: #c7d9f8;
+    --gold: #f59e0b;
+    --gold-light: #fef3c7;
+    --red: #dc2626;
+    --red-light: #fee2e2;
+    --amber: #d97706;
+    --green: #059669;
+    --green-light: #d1fae5;
+    --white: #ffffff;
+    --grey-100: #f8fafc;
+    --grey-200: #e2e8f0;
+    --grey-400: #94a3b8;
+    --grey-600: #475569;
+    --grey-800: #1e293b;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Outfit', sans-serif;
+    background: var(--navy);
+    color: var(--white);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── BACKGROUND ── */
+  .bg-grid {
+    position: fixed; inset: 0; z-index: 0;
+    background-image:
+      linear-gradient(rgba(37,99,235,0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(37,99,235,0.06) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+  }
+  .bg-orb {
+    position: fixed; border-radius: 50%; filter: blur(120px);
+    pointer-events: none; z-index: 0;
+  }
+  .bg-orb-1 { width: 600px; height: 600px; background: rgba(37,99,235,0.12); top: -200px; right: -200px; }
+  .bg-orb-2 { width: 400px; height: 400px; background: rgba(245,158,11,0.07); bottom: 100px; left: -100px; }
+
+  /* ── LAYOUT ── */
+  .wrapper {
+    position: relative; z-index: 1;
+    max-width: 780px; margin: 0 auto;
+    padding: 48px 24px 80px;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    text-align: center; margin-bottom: 56px;
+    animation: fadeUp 0.8s ease both;
+  }
+  .header-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(37,99,235,0.15);
+    border: 1px solid rgba(37,99,235,0.4);
+    border-radius: 100px; padding: 6px 16px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px; letter-spacing: 0.12em;
+    color: var(--blue-glow); text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+  .header-badge::before {
+    content: ''; width: 6px; height: 6px;
+    background: var(--blue-glow); border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+  }
+  .header h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(28px, 5vw, 42px);
+    line-height: 1.15; margin-bottom: 16px;
+    letter-spacing: -0.02em;
+  }
+  .header h1 em {
+    font-style: italic; color: var(--gold);
+  }
+  .header p {
+    font-size: 16px; color: var(--grey-400);
+    line-height: 1.6; max-width: 520px; margin: 0 auto 28px;
+  }
+  .header-meta {
+    display: flex; justify-content: center; gap: 24px; flex-wrap: wrap;
+    font-family: 'DM Mono', monospace; font-size: 11px;
+    color: var(--grey-400); letter-spacing: 0.08em;
+  }
+  .header-meta span {
+    display: flex; align-items: center; gap: 6px;
+  }
+  .header-meta span::before {
+    content: '—'; color: var(--blue-bright); font-weight: 300;
+  }
+
+  /* ── PROGRESS BAR ── */
+  .progress-wrap {
+    margin-bottom: 40px;
+    animation: fadeUp 0.8s 0.1s ease both;
+  }
+  .progress-labels {
+    display: flex; justify-content: space-between;
+    font-family: 'DM Mono', monospace; font-size: 11px;
+    color: var(--grey-400); margin-bottom: 10px;
+  }
+  .progress-track {
+    height: 3px; background: rgba(255,255,255,0.08);
+    border-radius: 2px; overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%; background: linear-gradient(90deg, var(--blue-bright), var(--blue-glow));
+    border-radius: 2px; transition: width 0.5s cubic-bezier(0.4,0,0.2,1);
+    width: 0%;
+  }
+
+  /* ── SECTION LABEL ── */
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px; letter-spacing: 0.2em;
+    color: var(--blue-glow); text-transform: uppercase;
+    margin-bottom: 16px; display: flex; align-items: center; gap: 12px;
+    animation: fadeUp 0.6s ease both;
+  }
+  .section-label::after {
+    content: ''; flex: 1; height: 1px;
+    background: linear-gradient(90deg, rgba(37,99,235,0.3), transparent);
+  }
+
+  /* ── QUESTION CARD ── */
+  .question-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 16px; padding: 28px 28px 24px;
+    margin-bottom: 16px;
+    transition: border-color 0.3s, background 0.3s, transform 0.2s;
+    animation: fadeUp 0.5s ease both;
+    cursor: default;
+  }
+  .question-card:hover {
+    border-color: rgba(37,99,235,0.3);
+    background: rgba(37,99,235,0.04);
+  }
+  .question-card.answered {
+    border-color: rgba(37,99,235,0.25);
+    background: rgba(37,99,235,0.06);
+  }
+  .q-header {
+    display: flex; align-items: flex-start; gap: 14px; margin-bottom: 20px;
+  }
+  .q-number {
+    flex-shrink: 0;
+    font-family: 'DM Mono', monospace; font-size: 11px;
+    color: var(--blue-glow); letter-spacing: 0.08em;
+    background: rgba(37,99,235,0.15);
+    border: 1px solid rgba(37,99,235,0.3);
+    border-radius: 6px; padding: 3px 9px;
+    margin-top: 2px;
+  }
+  .q-text {
+    font-size: 15px; line-height: 1.55;
+    color: rgba(255,255,255,0.88); font-weight: 400;
+  }
+  .q-text strong {
+    color: var(--white); font-weight: 600;
+  }
+
+  /* ── OPTIONS ── */
+  .options {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  @media (max-width: 540px) { .options { grid-template-columns: 1fr; } }
+
+  .option {
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px 14px; border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.08);
+    background: rgba(255,255,255,0.02);
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4,0,0.2,1);
+    user-select: none;
+    font-size: 13.5px; color: rgba(255,255,255,0.7);
+    font-weight: 400;
+  }
+  .option:hover {
+    border-color: rgba(37,99,235,0.4);
+    background: rgba(37,99,235,0.08);
+    color: var(--white);
+    transform: translateY(-1px);
+  }
+  .option.selected {
+    border-color: var(--blue-bright);
+    background: rgba(37,99,235,0.18);
+    color: var(--white); font-weight: 500;
+  }
+  .option.selected .opt-dot {
+    background: var(--blue-bright);
+    border-color: var(--blue-bright);
+    box-shadow: 0 0 0 3px rgba(37,99,235,0.25);
+  }
+  .option.selected .opt-dot::after {
+    opacity: 1; transform: scale(1);
+  }
+  .opt-dot {
+    width: 16px; height: 16px; border-radius: 50%; flex-shrink: 0;
+    border: 2px solid rgba(255,255,255,0.2);
+    background: transparent;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+    position: relative;
+  }
+  .opt-dot::after {
+    content: ''; width: 6px; height: 6px;
+    border-radius: 50%; background: white;
+    opacity: 0; transform: scale(0);
+    transition: all 0.15s;
+  }
+  .opt-points {
+    margin-left: auto; font-family: 'DM Mono', monospace;
+    font-size: 10px; color: var(--grey-400); flex-shrink: 0;
+  }
+  .option.selected .opt-points { color: var(--blue-glow); }
+
+  /* ── CTA BUTTON ── */
+  .cta-wrap {
+    text-align: center; margin-top: 40px;
+    animation: fadeUp 0.5s ease both;
+  }
+  .cta-btn {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: linear-gradient(135deg, var(--blue) 0%, var(--blue-bright) 100%);
+    color: white; border: none; cursor: pointer;
+    font-family: 'Outfit', sans-serif; font-size: 15px; font-weight: 600;
+    padding: 16px 40px; border-radius: 12px;
+    letter-spacing: 0.01em;
+    transition: all 0.25s; position: relative; overflow: hidden;
+    box-shadow: 0 4px 24px rgba(37,99,235,0.35);
+  }
+  .cta-btn::before {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.1), transparent);
+    opacity: 0; transition: opacity 0.2s;
+  }
+  .cta-btn:hover::before { opacity: 1; }
+  .cta-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(37,99,235,0.5); }
+  .cta-btn:active { transform: translateY(0); }
+  .cta-btn:disabled {
+    opacity: 0.35; cursor: not-allowed;
+    transform: none; box-shadow: none;
+  }
+  .cta-note {
+    margin-top: 12px; font-size: 13px;
+    color: var(--grey-400); font-style: italic;
+  }
+
+  /* ── RESULTS ── */
+  #results { display: none; }
+  .results-header {
+    text-align: center; margin-bottom: 48px;
+    animation: fadeUp 0.6s ease both;
+  }
+  .score-ring-wrap {
+    display: flex; justify-content: center; margin-bottom: 32px;
+  }
+  .score-ring {
+    position: relative; width: 180px; height: 180px;
+  }
+  .score-ring svg { transform: rotate(-90deg); }
+  .score-ring-bg { fill: none; stroke: rgba(255,255,255,0.06); stroke-width: 10; }
+  .score-ring-fill {
+    fill: none; stroke-width: 10; stroke-linecap: round;
+    stroke-dasharray: 502; stroke-dashoffset: 502;
+    transition: stroke-dashoffset 1.2s cubic-bezier(0.4,0,0.2,1);
+  }
+  .score-center {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+  }
+  .score-number {
+    font-family: 'DM Serif Display', serif;
+    font-size: 48px; line-height: 1; letter-spacing: -0.03em;
+  }
+  .score-denom {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px; color: var(--grey-400);
+  }
+  .verdict-badge {
+    display: inline-block; border-radius: 100px;
+    padding: 8px 24px; margin-bottom: 20px;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase;
+    font-weight: 500;
+  }
+  .results-header h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(24px,4vw,36px); margin-bottom: 12px;
+    letter-spacing: -0.02em;
+  }
+  .results-header p {
+    font-size: 15px; color: var(--grey-400); line-height: 1.7;
+    max-width: 560px; margin: 0 auto;
+  }
+
+  /* ── BREAKDOWN ── */
+  .breakdown {
+    margin-bottom: 40px;
+    animation: fadeUp 0.6s 0.2s ease both;
+  }
+  .breakdown-title {
+    font-family: 'DM Mono', monospace; font-size: 10px;
+    letter-spacing: 0.2em; color: var(--blue-glow);
+    text-transform: uppercase; margin-bottom: 16px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .breakdown-title::after {
+    content: ''; flex: 1; height: 1px;
+    background: linear-gradient(90deg, rgba(37,99,235,0.3), transparent);
+  }
+  .breakdown-row {
+    display: flex; align-items: center; gap: 14px;
+    padding: 14px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+  .breakdown-row:last-child { border-bottom: none; }
+  .breakdown-label { font-size: 13px; color: var(--grey-400); min-width: 180px; }
+  .breakdown-track {
+    flex: 1; height: 6px; background: rgba(255,255,255,0.07);
+    border-radius: 3px; overflow: hidden;
+  }
+  .breakdown-bar {
+    height: 100%; border-radius: 3px;
+    transition: width 1s 0.4s cubic-bezier(0.4,0,0.2,1);
+    width: 0%;
+  }
+  .breakdown-score {
+    font-family: 'DM Mono', monospace; font-size: 12px;
+    color: var(--white); min-width: 40px; text-align: right;
+  }
+
+  /* ── GAP CARDS ── */
+  .gap-section {
+    margin-bottom: 40px;
+    animation: fadeUp 0.6s 0.3s ease both;
+  }
+  .gap-card {
+    display: flex; gap: 14px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 12px; padding: 18px 20px;
+    margin-bottom: 10px;
+  }
+  .gap-card.critical { border-color: rgba(220,38,38,0.25); background: rgba(220,38,38,0.05); }
+  .gap-card.warning { border-color: rgba(217,119,6,0.25); background: rgba(217,119,6,0.05); }
+  .gap-card.good { border-color: rgba(5,150,105,0.25); background: rgba(5,150,105,0.05); }
+  .gap-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+  .gap-content h4 { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+  .gap-content p { font-size: 13px; color: var(--grey-400); line-height: 1.55; }
+  .gap-card.critical .gap-content h4 { color: #f87171; }
+  .gap-card.warning .gap-content h4 { color: #fbbf24; }
+  .gap-card.good .gap-content h4 { color: #34d399; }
+
+  /* ── RECOMMENDATION BOX ── */
+  .rec-box {
+    background: linear-gradient(135deg, rgba(26,68,128,0.4), rgba(15,32,64,0.6));
+    border: 1px solid rgba(37,99,235,0.3);
+    border-radius: 16px; padding: 28px;
+    margin-bottom: 32px;
+    animation: fadeUp 0.6s 0.4s ease both;
+  }
+  .rec-box h3 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 20px; margin-bottom: 10px; letter-spacing: -0.01em;
+  }
+  .rec-box p { font-size: 14px; color: var(--grey-400); line-height: 1.65; margin-bottom: 16px; }
+  .rec-steps { list-style: none; }
+  .rec-steps li {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 10px 0; font-size: 14px; line-height: 1.5;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+  .rec-steps li:last-child { border-bottom: none; }
+  .rec-step-num {
+    flex-shrink: 0; width: 22px; height: 22px;
+    background: var(--blue-bright); border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700; margin-top: 1px;
+  }
+
+  /* ── SHARE CTA ── */
+  .share-cta {
+    background: rgba(245,158,11,0.08);
+    border: 1px solid rgba(245,158,11,0.25);
+    border-radius: 14px; padding: 24px 28px;
+    text-align: center; margin-bottom: 32px;
+    animation: fadeUp 0.6s 0.5s ease both;
+  }
+  .share-cta p {
+    font-size: 14px; color: rgba(255,255,255,0.75);
+    line-height: 1.6; margin-bottom: 16px;
+  }
+  .share-cta strong { color: var(--gold); }
+  .btn-secondary {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(245,158,11,0.15);
+    border: 1px solid rgba(245,158,11,0.4);
+    color: var(--gold); border-radius: 10px;
+    padding: 12px 24px; font-size: 14px; font-weight: 500;
+    cursor: pointer; transition: all 0.2s;
+    font-family: 'Outfit', sans-serif;
+  }
+  .btn-secondary:hover {
+    background: rgba(245,158,11,0.22);
+    transform: translateY(-1px);
+  }
+  .restart-btn {
+    display: block; width: fit-content; margin: 0 auto;
+    background: transparent; border: 1px solid rgba(255,255,255,0.15);
+    color: var(--grey-400); border-radius: 10px;
+    padding: 12px 24px; font-size: 14px;
+    cursor: pointer; transition: all 0.2s;
+    font-family: 'Outfit', sans-serif;
+    animation: fadeUp 0.6s 0.6s ease both;
+  }
+  .restart-btn:hover {
+    border-color: rgba(255,255,255,0.3); color: white;
+  }
+
+  /* ── FOOTER ── */
+  .footer {
+    text-align: center; margin-top: 60px;
+    padding-top: 32px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    animation: fadeUp 0.5s ease both;
+  }
+  .footer p { font-size: 12px; color: var(--grey-400); }
+  .footer strong { color: var(--blue-glow); }
+
+  /* ── ANIMATION ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── DELAY HELPERS ── */
+  .d1 { animation-delay: 0.1s; }
+  .d2 { animation-delay: 0.2s; }
+  .d3 { animation-delay: 0.3s; }
+  .d4 { animation-delay: 0.4s; }
+  .d5 { animation-delay: 0.5s; }
+  .d6 { animation-delay: 0.6s; }
+  .d7 { animation-delay: 0.7s; }
+  .d8 { animation-delay: 0.8s; }
+  .d9 { animation-delay: 0.9s; }
+  .d10 { animation-delay: 1.0s; }
+</style>
+</head>
+<body>
+
+<div class="bg-grid"></div>
+<div class="bg-orb bg-orb-1"></div>
+<div class="bg-orb bg-orb-2"></div>
+
+<div class="wrapper">
+
+  <!-- SCORECARD FORM -->
+  <div id="scorecard">
+
+    <div class="header">
+      <div class="header-badge">EU AI Act Diagnostic · 2026</div>
+      <h1>Article 12 & 19<br><em>Infrastructure Readiness</em> Scorecard</h1>
+      <p>A 3-minute diagnostic for automotive OTA and connected vehicle teams. Built specifically for eSIM/ACSP infrastructure and ADAS AI systems.</p>
+      <div class="header-meta">
+        <span>10 questions</span>
+        <span>3 minutes</span>
+        <span>Instant results</span>
+        <span>August 2026 deadline</span>
+      </div>
+    </div>
+
+    <div class="progress-wrap">
+      <div class="progress-labels">
+        <span id="prog-label">0 of 10 answered</span>
+        <span id="prog-pct">0%</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" id="progress-fill"></div>
+      </div>
+    </div>
+
+    <!-- SECTION A -->
+    <div class="section-label d1">Section A · Article 12 — Logging Capability</div>
+
+    <div class="question-card d2" id="card-1">
+      <div class="q-header">
+        <span class="q-number">01</span>
+        <span class="q-text">When an AI model is deployed via OTA update, does your infrastructure <strong>automatically generate</strong> a time-stamped audit record of that deployment event?</span>
+      </div>
+      <div class="options">
+        <div class="option" onclick="select(1,'a',3)"><span class="opt-dot"></span>Yes, fully automated<span class="opt-points">3 pts</span></div>
+        <div class="option" onclick="select(1,'b',1)"><span class="opt-dot"></span>Partial / ad-hoc<span class="opt-points">1 pt</span></div>
+        <div class="option" onclick="select(1,'c',0)"><span class="opt-dot"></span>No<span class="opt-points">0 pts</span></div>
+        <div class="option" onclick="select(1,'d',0)"><span class="opt-dot"></span>Don't know<span class="opt-points">0 pts</span></div>
+      </div>
+    </div>
+
+    <div class="question-card d3" id="card-2">
+      <div class="q-header">
+        <span class="q-number">02</span>
+        <span class="q-text">Are <strong>AI model inputs and outputs</strong> logged during live operational use — in a format retrievable within 48 hours for regulatory review?</span>
+      </div>
+      <div class="options">
+        <div class="option" onclick="select(2,'a',3)"><span class="opt-dot"></span>Yes, all high-risk systems<span class="opt-points">3 pts</span></div>
+        <div class="option" onclick="select(2,'b',1)"><span class="opt-dot"></span>Some systems only<span class="opt-points">1 pt</span></div>
+        <div class="option" onclick="select(2,'c',0)"><span class="opt-dot"></span>No<span class="opt-points">0 pts</span></div>
+        <div class="option" onclick="select(2,'d',0)"><span class="opt-dot"></span>Don't know<span class="opt-points">0 pts</span></div>
+      </div>
+    </div>
+
+    <div class="question-card d4" id="card-3">
+      <div class="q-header">
+        <span class="q-number">03</span>
+        <span class="q-text">Do your ADAS system logs capture <strong>human override and intervention events</strong> — specifically when a driver overrides an AI-assisted decision?</span>
+      </div>
+      <div class="options">
+        <div class="option" onclick="select(3,'a',3)"><span class="opt-dot"></span>Yes, systematically<span class="opt-points">3 pts</span></div>
+        <div class="option" onclick="select(3,'b',1)"><span class="opt-dot"></span>Informally tracked<span class="opt-points">1 pt</span></div>
+        <div class="option" onclick="select(3,'c',0)"><span class="opt-dot"></span>No<span class="opt-points">0 pts</span></div>
+        <div class="option" onclick="select(3,'d',0)"><span class="opt-dot"></span>Don't know<span class="opt-points">0 pts</span></div>
+      </div>
+    </div>
+
+    <div class="question-card d5" id="card-4">
+      <div class="q-header">
+        <span class="q-number">04</span>
+        <span class="q-text">Does each high-risk AI system have a <strong>defined Logging Schema</strong> that explicitly maps captured data fields to Article 12 compliance requirements?</span>
+      </div>
+      <div class="options">
+        <div class="option" onclick="select(4,'a',3)"><span class="opt-dot"></span>Yes, documented per system<span class="opt-points">3 pts</span></div>
+        <div class="option" onclick="select(4,'b',1)"><span class="opt-dot"></span>In progress<span class="opt-points">1 pt</span></div>
+        <div class="option" onclick="select(4,'c',0)"><span class="opt-dot"></span>No schemas defined<span class="opt-points">0 pts</span></div>
+        <div class="option" onclick="select(4,'d',0)"><span class="opt-dot"></span>Don't know<span class="opt-points">0 pts</span></div>
+      </div>
+    </div>
+
+    <div class="question-card d6" id="card-5">
+      <div class="q-header">
+        <span class="q-number">05</span>
+        <span class="q-text">Could your team produce <strong>6 months of AI operational logs</strong> in a regulator-readable format within 48 hours of a request?</span>
+      </div>
+      <div class="options">
+        <div class="option" onclick="select(5,'a',3)"><span class="opt-dot"></span>Yes, confidently<span class="opt-points">3 pts</span></div>
+        <div class="option" onclick="select(5,'b',1)"><span class="opt-dot"></span>Probably, with effort<span class="opt-points">1 pt</span></div>
+        <div class="option" onclick="select(5,'c',0)"><span class="opt-dot"></span>No<span class="opt-points">0 pts</span></div>
+        <div class="option" onclick="select(5,'d',0)"><span class="opt-dot"></span>Don't know<span class="opt-points">0 pts</span></div>
+      </div>
+    </div>
+
+    <!-- SECTION B -->
+    <div class="section-label" style="margin-top:40px; animation: fadeUp 0.5s 0.3s ease both;">Section B · Article 19 — Log Control</div>
+
+    <div class="question-card" id="card-6">
+      <div class="q-header">
+        <span class="q-number">06</span>
+        <span class="q-text">Is there a <strong>documented retention policy</strong> for AI operational logs — specifying minimum retention periods and archival procedures per system?</span>
+      </div>
+      <div class="options">
+        <div class="option" onclick="select(6,'a',3)"><span class="opt-dot"></span>Yes, documented policy<span class="opt-points">3 pts</span></div>
+        <div class="option" onclick="select(6,'b',1)"><span class="opt-dot"></span>Informal / assumed<span class="opt-points">1 pt</span></div>
+        <div class="option" onclick="select(6,'c',0)"><span class="opt-dot"></span>No policy<span class="opt-points">0 pts</span></div>
+        <div class="option" onclick="select(6,'d',0)"><span class="opt-dot"></span>Don't know<span class="opt-points">0 pts</span></div>
+      </div>
+    </div>
+
+    <div class="question-card" id="card-7">
+      <div class="q-header">
+        <span class="q-number">07</span>
+        <span class="q-text">Are AI system logs <strong>technically protected</strong> against tampering, deletion or modification — with integrity verification mechanisms in place?</span>
+      </div>
+      <div class="options">
+        <div class="option" onclick="select(7,'a',3)"><span class="opt-dot"></span>Yes, enforced technically<span class="opt-points">3 pts</span></div>
+        <div class="option" onclick="select(7,'b',1)"><span class="opt-dot"></span>Policy only, no enforcement<span class="opt-points">1 pt</span></div>
+        <div class="option" onclick="select(7,'c',0)"><span class="opt-dot"></span>No protection<span class="opt-points">0 pts</span></div>
+        <div class="option" onclick="select(7,'d',0)"><span class="opt-dot"></span>Don't know<span class="opt-points">0 pts</span></div>
+      </div>
+    </div>
+
+    <div class="question-card" id="card-8">
+      <div class="q-header">
+        <span class="q-number">08</span>
+        <span class="q-text">Is access to AI operational logs <strong>restricted by role</strong>, with a complete access audit trail — knowing exactly who viewed or exported log data and when?</span>
+      </div>
+      <div class="options">
+        <div class="option" onclick="select(8,'a',3)"><span class="opt-dot"></span>Yes, role-based + auditable<span class="opt-points">3 pts</span></div>
+        <div class="option" onclick="select(8,'b',1)"><span class="opt-dot"></span>Restricted but not audited<span class="opt-points">1 pt</span></div>
+        <div class="option" onclick="select(8,'c',0)"><span class="opt-dot"></span>Open access<span class="opt-points">0 pts</span></div>
+        <div class="option" onclick="select(8,'d',0)"><span class="opt-dot"></span>Don't know<span class="opt-points">0 pts</span></div>
+      </div>
+    </div>
+
+    <!-- SECTION C -->
+    <div class="section-label" style="margin-top:40px; animation: fadeUp 0.5s 0.3s ease both;">Section C · Audit Readiness</div>
+
+    <div class="question-card" id="card-9">
+      <div class="q-header">
+        <span class="q-number">09</span>
+        <span class="q-text">Does any high-risk AI system in your portfolio have a completed <strong>Audit Defense Brief</strong> — a narrative document explaining how your logging approach satisfies Article 12 and 19 requirements?</span>
+      </div>
+      <div class="options">
+        <div class="option" onclick="select(9,'a',3)"><span class="opt-dot"></span>Yes, reviewed by legal<span class="opt-points">3 pts</span></div>
+        <div class="option" onclick="select(9,'b',1)"><span class="opt-dot"></span>Draft exists<span class="opt-points">1 pt</span></div>
+        <div class="option" onclick="select(9,'c',0)"><span class="opt-dot"></span>Nothing exists<span class="opt-points">0 pts</span></div>
+        <div class="option" onclick="select(9,'d',0)"><span class="opt-dot"></span>Don't know<span class="opt-points">0 pts</span></div>
+      </div>
+    </div>
+
+    <div class="question-card" id="card-10">
+      <div class="q-header">
+        <span class="q-number">10</span>
+        <span class="q-text">Could your ADAS engineering team explain their <strong>logging compliance approach to a non-technical regulator</strong> in a 15-minute audit interview — without preparation time?</span>
+      </div>
+      <div class="options">
+        <div class="option" onclick="select(10,'a',3)"><span class="opt-dot"></span>Yes, confidently<span class="opt-points">3 pts</span></div>
+        <div class="option" onclick="select(10,'b',1)"><span class="opt-dot"></span>With preparation, yes<span class="opt-points">1 pt</span></div>
+        <div class="option" onclick="select(10,'c',0)"><span class="opt-dot"></span>No<span class="opt-points">0 pts</span></div>
+        <div class="option" onclick="select(10,'d',0)"><span class="opt-dot"></span>Don't know<span class="opt-points">0 pts</span></div>
+      </div>
+    </div>
+
+    <div class="cta-wrap">
+      <button class="cta-btn" id="submit-btn" onclick="showResults()" disabled>
+        <span>Calculate My Score</span>
+        <span>→</span>
+      </button>
+      <p class="cta-note">Answer all 10 questions to see your results</p>
+    </div>
+
+  </div><!-- end #scorecard -->
+
+  <!-- RESULTS -->
+  <div id="results">
+
+    <div class="results-header">
+      <div class="score-ring-wrap">
+        <div class="score-ring">
+          <svg viewBox="0 0 180 180" width="180" height="180">
+            <circle class="score-ring-bg" cx="90" cy="90" r="80"/>
+            <circle class="score-ring-fill" id="ring-fill" cx="90" cy="90" r="80"/>
+          </svg>
+          <div class="score-center">
+            <div class="score-number" id="score-display">0</div>
+            <div class="score-denom">out of 30</div>
+          </div>
+        </div>
+      </div>
+      <div class="verdict-badge" id="verdict-badge">—</div>
+      <h2 id="verdict-title">—</h2>
+      <p id="verdict-desc">—</p>
+    </div>
+
+    <div class="breakdown">
+      <div class="breakdown-title">Score Breakdown by Section</div>
+      <div class="breakdown-row">
+        <span class="breakdown-label">Article 12 — Logging Capability</span>
+        <div class="breakdown-track"><div class="breakdown-bar" id="bar-a" style="background: var(--blue-bright)"></div></div>
+        <span class="breakdown-score" id="score-a">0/15</span>
+      </div>
+      <div class="breakdown-row">
+        <span class="breakdown-label">Article 19 — Log Control</span>
+        <div class="breakdown-track"><div class="breakdown-bar" id="bar-b" style="background: var(--gold)"></div></div>
+        <span class="breakdown-score" id="score-b">0/9</span>
+      </div>
+      <div class="breakdown-row">
+        <span class="breakdown-label">Audit Readiness</span>
+        <div class="breakdown-track"><div class="breakdown-bar" id="bar-c" style="background: var(--green)"></div></div>
+        <span class="breakdown-score" id="score-c">0/6</span>
+      </div>
+    </div>
+
+    <div class="gap-section">
+      <div class="breakdown-title">Key Gaps Identified</div>
+      <div id="gaps-container"></div>
+    </div>
+
+    <div class="rec-box" id="rec-box">
+      <h3 id="rec-title">Recommended Action</h3>
+      <p id="rec-desc">—</p>
+      <ul class="rec-steps" id="rec-steps"></ul>
+    </div>
+
+    <div class="share-cta">
+      <p>This scorecard was built by <strong>LXD Advisory</strong> specifically for automotive infrastructure and ADAS teams preparing for the EU AI Act Article 12/19 deadline.<br>If your MHP clients would benefit from this diagnostic, it's designed to be shared.</p>
+      <button class="btn-secondary" onclick="copyLink()">
+        <span>⧉</span> Copy link to share with clients
+      </button>
+    </div>
+
+    <button class="restart-btn" onclick="restart()">← Retake the scorecard</button>
+
+  </div><!-- end #results -->
+
+  <div class="footer">
+    <p>Built by <strong>Keithan · LXD Advisory</strong> · EU AI Act Article 12 & 19 Compliance · August 2026 Deadline<br>
+    This diagnostic is for self-assessment purposes. Results do not constitute legal compliance advice.</p>
+  </div>
+
+</div><!-- end .wrapper -->
+
+<script>
+  const answers = {};
+  const points = {};
+
+  function select(q, opt, pts) {
+    const card = document.getElementById('card-' + q);
+    card.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+    const options = card.querySelectorAll('.option');
+    const idx = ['a','b','c','d'].indexOf(opt);
+    if (options[idx]) options[idx].classList.add('selected');
+    answers[q] = opt;
+    points[q] = pts;
+    card.classList.add('answered');
+    updateProgress();
+  }
+
+  function updateProgress() {
+    const answered = Object.keys(answers).length;
+    const pct = Math.round((answered / 10) * 100);
+    document.getElementById('progress-fill').style.width = pct + '%';
+    document.getElementById('prog-label').textContent = answered + ' of 10 answered';
+    document.getElementById('prog-pct').textContent = pct + '%';
+    const btn = document.getElementById('submit-btn');
+    btn.disabled = answered < 10;
+    if (answered === 10) {
+      btn.querySelector('span:first-child').textContent = 'See My Results';
+    }
+  }
+
+  function showResults() {
+    const total = Object.values(points).reduce((a, b) => a + b, 0);
+    const sA = (points[1]||0) + (points[2]||0) + (points[3]||0) + (points[4]||0) + (points[5]||0);
+    const sB = (points[6]||0) + (points[7]||0) + (points[8]||0);
+    const sC = (points[9]||0) + (points[10]||0);
+
+    document.getElementById('scorecard').style.display = 'none';
+    document.getElementById('results').style.display = 'block';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    // Animate score
+    let displayed = 0;
+    const interval = setInterval(() => {
+      if (displayed >= total) { clearInterval(interval); return; }
+      displayed++;
+      document.getElementById('score-display').textContent = displayed;
+    }, 50);
+
+    // Ring
+    const circumference = 2 * Math.PI * 80; // 502.65
+    const offset = circumference - (total / 30) * circumference;
+    const ring = document.getElementById('ring-fill');
+    let ringColor;
+    if (total <= 10) ringColor = '#dc2626';
+    else if (total <= 20) ringColor = '#d97706';
+    else if (total <= 25) ringColor = '#2563eb';
+    else ringColor = '#059669';
+    ring.style.stroke = ringColor;
+    setTimeout(() => { ring.style.strokeDashoffset = offset; }, 100);
+
+    // Verdict
+    const badge = document.getElementById('verdict-badge');
+    const title = document.getElementById('verdict-title');
+    const desc = document.getElementById('verdict-desc');
+
+    if (total <= 10) {
+      badge.textContent = '⚠ CRITICAL — Immediate Action Required';
+      badge.style.background = 'rgba(220,38,38,0.15)';
+      badge.style.border = '1px solid rgba(220,38,38,0.4)';
+      badge.style.color = '#f87171';
+      title.textContent = 'Your infrastructure is not audit-ready';
+      desc.textContent = 'With a score of ' + total + '/30, your current logging architecture cannot produce the artifacts required for Article 12 and 19 compliance. ADAS models pushed via OTA today are technically non-compliant the moment they go live. With 18 months to the August 2026 enforcement deadline, this requires immediate methodology work.';
+    } else if (total <= 20) {
+      badge.textContent = '⚡ AT RISK — Significant Gaps Remain';
+      badge.style.background = 'rgba(217,119,6,0.12)';
+      badge.style.border = '1px solid rgba(217,119,6,0.35)';
+      badge.style.color = '#fbbf24';
+      title.textContent = 'Partial capability — critical gaps in schema and control';
+      desc.textContent = 'A score of ' + total + '/30 indicates logging infrastructure exists but lacks the structured methodology and defined schemas to produce audit-ready artifacts. Regulators will not accept unstructured logs. The 18-month window to August 2026 is shorter than it appears once you factor in the teams that need to be trained.';
+    } else if (total <= 25) {
+      badge.textContent = '📈 PROGRESSING — Methodology Gap Remains';
+      badge.style.background = 'rgba(37,99,235,0.12)';
+      badge.style.border = '1px solid rgba(37,99,235,0.35)';
+      badge.style.color = '#93c5fd';
+      title.textContent = 'Strong foundation — Audit Defense Brief is the missing piece';
+      desc.textContent = 'At ' + total + '/30, your infrastructure is better positioned than most automotive teams. The typical gap at this score level is the Audit Defense Brief and the Infrastructure Implementation Spec — the documents that tie your logging capability to specific Article 12 and 19 requirements in language auditors understand.';
+    } else {
+      badge.textContent = '✓ ADVANCED — Optimize & Document';
+      badge.style.background = 'rgba(5,150,105,0.12)';
+      badge.style.border = '1px solid rgba(5,150,105,0.35)';
+      badge.style.color = '#34d399';
+      title.textContent = 'Well positioned — focus on documentation completeness';
+      desc.textContent = 'A score of ' + total + '/30 puts you ahead of most automotive infrastructure teams. The focus at this level should be formal documentation of existing practices and ensuring ADAS engineering teams can articulate the compliance story to non-technical auditors.';
+    }
+
+    // Breakdown bars
+    setTimeout(() => {
+      document.getElementById('bar-a').style.width = (sA / 15 * 100) + '%';
+      document.getElementById('bar-b').style.width = (sB / 9 * 100) + '%';
+      document.getElementById('bar-c').style.width = (sC / 6 * 100) + '%';
+    }, 300);
+    document.getElementById('score-a').textContent = sA + '/15';
+    document.getElementById('score-b').textContent = sB + '/9';
+    document.getElementById('score-c').textContent = sC + '/6';
+
+    // Gaps
+    const gaps = [];
+    if (points[4] < 2) gaps.push({ type:'critical', icon:'🔴', title:'No Logging Schemas Defined (Q4)', desc:'ADAS teams have not defined what data maps to Article 12 requirements. This is the foundational gap — without defined schemas, no downstream compliance artifact is valid.' });
+    if (points[9] === 0) gaps.push({ type:'critical', icon:'🔴', title:'No Audit Defense Brief Exists (Q9)', desc:'No high-risk AI system has a document explaining how your logging satisfies Article 12/19. This is what auditors will request first. Without it, your technical capability is invisible.' });
+    if (points[2] < 2) gaps.push({ type:'critical', icon:'🔴', title:'Input/Output Logging Incomplete (Q2)', desc:'AI model inputs and outputs are not fully logged during operation. Article 12 requires this to be automatic and retrievable. Models going OTA without this are technically non-compliant.' });
+    if (points[7] < 2) gaps.push({ type:'warning', icon:'🟡', title:'Log Integrity Not Enforced (Q7)', desc:'Log protection against tampering is policy-only or absent. Article 19 requires technical enforcement. An integrity gap can invalidate your entire logging infrastructure as evidence.' });
+    if (points[8] < 2) gaps.push({ type:'warning', icon:'🟡', title:'Access Control Not Fully Auditable (Q8)', desc:'Log access is not fully role-based or auditable. Regulators may ask who accessed your compliance logs and when — if you cannot answer, access control becomes a compliance finding.' });
+    if (points[10] < 2) gaps.push({ type:'warning', icon:'🟡', title:'Teams Cannot Explain Compliance (Q10)', desc:'ADAS engineers cannot yet articulate the logging compliance story to non-technical auditors. Technical capability without narrative capability fails in audit interviews.' });
+    if (points[3] < 2) gaps.push({ type:'warning', icon:'🟡', title:'Human Override Logging Incomplete (Q3)', desc:'Human driver interventions in ADAS decisions are not systematically logged. These events are specifically cited in Article 12 guidance as required logging events for high-risk AI.' });
+    if (gaps.length === 0) gaps.push({ type:'good', icon:'✅', title:'No Critical Gaps Identified', desc:'Your infrastructure readiness is strong. Focus on ensuring formal documentation covers all existing practices and that your teams can articulate this to auditors.' });
+
+    const gapContainer = document.getElementById('gaps-container');
+    gapContainer.innerHTML = '';
+    gaps.slice(0,4).forEach(g => {
+      gapContainer.innerHTML += `<div class="gap-card ${g.type}"><div class="gap-icon">${g.icon}</div><div class="gap-content"><h4>${g.title}</h4><p>${g.desc}</p></div></div>`;
+    });
+
+    // Recommendations
+    const recTitle = document.getElementById('rec-title');
+    const recDesc = document.getElementById('rec-desc');
+    const recSteps = document.getElementById('rec-steps');
+
+    if (total <= 10) {
+      recTitle.textContent = 'Recommended: 3-Week Pilot — Immediate Start';
+      recDesc.textContent = 'A score of ' + total + '/30 requires structured methodology intervention before August 2026. The following steps will move you from critical to compliant within 3 weeks per ADAS system:';
+      recSteps.innerHTML = `
+        <li><span class="rec-step-num">1</span><span>Define logging schemas for your 2-3 highest-priority ADAS systems — mapping each data field to specific Article 12 requirements</span></li>
+        <li><span class="rec-step-num">2</span><span>Produce Article 19 log control procedures covering retention, access restriction, and integrity verification</span></li>
+        <li><span class="rec-step-num">3</span><span>Create Audit Defense Briefs for each system — the narrative document auditors will request</span></li>
+        <li><span class="rec-step-num">4</span><span>Produce Infrastructure Implementation Spec — configuring eSIM/ACSP to capture compliant log structures automatically</span></li>
+        <li><span class="rec-step-num">5</span><span>Run mock audit simulation with engineering team — practice explaining compliance story without preparation time</span></li>`;
+    } else if (total <= 20) {
+      recTitle.textContent = 'Recommended: Targeted Pilot — Q1/Q2 2026';
+      recDesc.textContent = 'Your infrastructure CAN support compliance — the gaps are methodological, not architectural. A targeted 3-week pilot to close schema and documentation gaps will significantly improve your position:';
+      recSteps.innerHTML = `
+        <li><span class="rec-step-num">1</span><span>Formalise existing logging into defined schemas per Article 12 requirements — currently the most critical gap</span></li>
+        <li><span class="rec-step-num">2</span><span>Strengthen Article 19 log control with technical enforcement (not policy only) — especially integrity verification</span></li>
+        <li><span class="rec-step-num">3</span><span>Complete Audit Defense Brief for each high-risk system — this is your primary documentation gap</span></li>
+        <li><span class="rec-step-num">4</span><span>Train ADAS teams to explain compliance narrative without preparation — audit-readiness is both document and people</span></li>`;
+    } else if (total <= 25) {
+      recTitle.textContent = 'Recommended: Documentation Sprint — Optimize Existing Capability';
+      recDesc.textContent = 'Your infrastructure is strong. The remaining gaps are documentation and narrative — ensuring your technical capability is visible and explainable in audit contexts:';
+      recSteps.innerHTML = `
+        <li><span class="rec-step-num">1</span><span>Complete Audit Defense Briefs for all high-risk AI systems — formalising existing practices into audit-ready language</span></li>
+        <li><span class="rec-step-num">2</span><span>Produce Infrastructure Implementation Spec — a configuration reference that proves Article 12 intent in your eSIM/ACSP setup</span></li>
+        <li><span class="rec-step-num">3</span><span>Run mock audit simulation — validate that ADAS teams can articulate compliance story to non-technical regulators</span></li>`;
+    } else {
+      recTitle.textContent = 'Recommended: Compliance Audit & Certification Preparation';
+      recDesc.textContent = 'Your position is strong. The next step is formal validation and ensuring documentation is complete and legally reviewed:';
+      recSteps.innerHTML = `
+        <li><span class="rec-step-num">1</span><span>Commission formal compliance audit against Article 12 and 19 requirements to identify any remaining edge cases</span></li>
+        <li><span class="rec-step-num">2</span><span>Ensure all Audit Defense Briefs are legally reviewed and signed off</span></li>
+        <li><span class="rec-step-num">3</span><span>Consider train-the-trainer program to ensure compliance methodology scales across all ADAS teams</span></li>`;
+    }
+  }
+
+  function restart() {
+    Object.keys(answers).forEach(k => delete answers[k]);
+    Object.keys(points).forEach(k => delete points[k]);
+    document.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+    document.querySelectorAll('.question-card').forEach(c => c.classList.remove('answered'));
+    document.getElementById('progress-fill').style.width = '0%';
+    document.getElementById('prog-label').textContent = '0 of 10 answered';
+    document.getElementById('prog-pct').textContent = '0%';
+    document.getElementById('submit-btn').disabled = true;
+    document.getElementById('submit-btn').querySelector('span:first-child').textContent = 'Calculate My Score';
+    document.getElementById('results').style.display = 'none';
+    document.getElementById('scorecard').style.display = 'block';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function copyLink() {
+    const url = window.location.href;
+    navigator.clipboard.writeText(url).then(() => {
+      const btn = document.querySelector('.btn-secondary');
+      btn.innerHTML = '<span>✓</span> Link copied!';
+      setTimeout(() => { btn.innerHTML = '<span>⧉</span> Copy link to share with clients'; }, 2000);
+    }).catch(() => {
+      alert('Please copy this URL to share: ' + url);
+    });
+  }
+</script>
+</body>
+</html>
