@@ -1,42 +1,244 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI Act Article 12/19 Infrastructure Readiness Scorecard</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<style>
-  /* Your existing :root and styles remain mostly unchanged – I added/edited these for better UX */
-  body { line-height: 1.6; }
-  .option { min-height: 48px; align-items: center; } /* Better touch targets */
-  .lead-form { background: rgba(37,99,235,0.08); border: 1px solid rgba(37,99,235,0.3); border-radius: 16px; padding: 28px; margin: 32px 0; display: none; }
-  .lead-form.show { display: block; animation: fadeUp 0.6s ease; }
-  .lead-form input[type="email"] { width: 100%; padding: 14px; margin: 12px 0; border-radius: 8px; border: 1px solid var(--grey-400); background: var(--navy-mid); color: white; font-size: 16px; }
-  .lead-form button { background: var(--blue-bright); color: white; border: none; padding: 14px 28px; border-radius: 10px; font-weight: 600; cursor: pointer; width: 100%; margin-top: 12px; }
-  .teaser { font-style: italic; color: var(--grey-400); margin: 16px 0; }
-  .hidden-results { display: none; opacity: 0; transition: opacity 0.8s; }
-  .hidden-results.show { display: block; opacity: 1; }
-  /* ... rest of your styles unchanged ... */
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Act Article 12/19 Infrastructure Readiness Scorecard</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --navy-dark: #0a1f44;
+      --navy-mid: #1a355f;
+      --blue-bright: #2563eb;
+      --blue-glow: #3b82f6;
+      --green-success: #10b981;
+      --red-alert: #ef4444;
+      --grey-400: #9ca3af;
+      --grey-600: #4b5563;
+      --white: #ffffff;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Outfit', sans-serif;
+      background: linear-gradient(135deg, #0f172a, #1e293b);
+      color: var(--white);
+      line-height: 1.6;
+    }
+
+    .wrapper {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .header-badge {
+      display: inline-block;
+      background: rgba(37,99,235,0.15);
+      color: var(--blue-bright);
+      padding: 8px 16px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+
+    h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 3.2rem;
+      margin: 0 0 16px;
+    }
+
+    h1 em {
+      font-style: italic;
+      color: var(--grey-400);
+    }
+
+    .option {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px;
+      padding: 16px 20px;
+      margin: 12px 0;
+      cursor: pointer;
+      transition: all 0.2s;
+      min-height: 48px;
+      display: flex;
+      align-items: center;
+    }
+
+    .option:hover {
+      background: rgba(37,99,235,0.12);
+      border-color: var(--blue-bright);
+    }
+
+    .option.selected {
+      background: rgba(37,99,235,0.2);
+      border-color: var(--blue-bright);
+      box-shadow: 0 0 0 3px rgba(37,99,235,0.3);
+    }
+
+    .cta-wrap {
+      text-align: center;
+      margin-top: 40px;
+    }
+
+    .cta-btn {
+      background: var(--blue-bright);
+      color: white;
+      border: none;
+      padding: 16px 40px;
+      border-radius: 12px;
+      font-size: 18px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .cta-btn:hover {
+      background: #1d4ed8;
+      transform: translateY(-2px);
+    }
+
+    .cta-btn:disabled {
+      background: #4b5563;
+      cursor: not-allowed;
+    }
+
+    .cta-note {
+      color: var(--grey-400);
+      font-size: 14px;
+      margin-top: 12px;
+    }
+
+    #results {
+      background: rgba(255,255,255,0.03);
+      border-radius: 20px;
+      padding: 32px;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .results-header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .lead-form {
+      background: rgba(37,99,235,0.08);
+      border: 1px solid rgba(37,99,235,0.3);
+      border-radius: 16px;
+      padding: 28px;
+      margin: 32px 0;
+      display: none;
+    }
+
+    .lead-form.show {
+      display: block;
+      animation: fadeUp 0.6s ease;
+    }
+
+    .lead-form input[type="email"] {
+      width: 100%;
+      padding: 14px;
+      margin: 12px 0;
+      border-radius: 8px;
+      border: 1px solid var(--grey-400);
+      background: var(--navy-mid);
+      color: white;
+      font-size: 16px;
+    }
+
+    .lead-form button {
+      background: var(--blue-bright);
+      color: white;
+      border: none;
+      padding: 14px 28px;
+      border-radius: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 12px;
+      font-size: 16px;
+    }
+
+    .teaser {
+      font-style: italic;
+      color: var(--grey-400);
+      margin: 16px 0;
+      font-size: 15px;
+    }
+
+    .hidden-results {
+      display: none;
+      opacity: 0;
+      transition: opacity 0.8s;
+    }
+
+    .hidden-results.show {
+      display: block;
+      opacity: 1;
+    }
+
+    .gap-card {
+      background: rgba(255,255,255,0.05);
+      border-radius: 12px;
+      padding: 16px;
+      margin: 12px 0;
+    }
+
+    .btn-secondary {
+      background: rgba(37,99,235,0.15);
+      color: var(--blue-bright);
+      padding: 12px 24px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: 600;
+      display: inline-block;
+      margin-top: 16px;
+    }
+
+    .restart-btn {
+      background: transparent;
+      border: 1px solid var(--grey-400);
+      color: var(--grey-400);
+      padding: 12px 24px;
+      border-radius: 10px;
+      cursor: pointer;
+      margin-top: 32px;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Add your original styles for progress, score ring, breakdown bars, etc. here */
+  </style>
 </head>
 <body>
-<!-- Your background divs unchanged -->
 
 <div class="wrapper">
-  <!-- SCORECARD FORM – unchanged except minor copy tweaks for clarity -->
+  <!-- SCORECARD FORM -->
   <div id="scorecard">
     <div class="header">
       <div class="header-badge">EU AI Act Diagnostic · Enforcement Aug 2026</div>
       <h1>Article 12 & 19<br><em>Logging & Control</em> Readiness Scorecard</h1>
       <p>3-minute self-assessment for automotive ADAS, OTA, and connected vehicle teams. Checks automatic logging (Art. 12), log protection/retention (Art. 19), and audit preparedness.</p>
-      <!-- meta unchanged -->
     </div>
 
-    <!-- Progress, sections, questions unchanged – but consider adding aria-labels for accessibility, e.g. -->
-    <!-- Example for one question: -->
-    <!-- <div class="option" role="button" tabindex="0" onclick="select(1,'a',3)" aria-label="Yes, fully automated – 3 points">...</div> -->
-
-    <!-- ... all questions as-is ... -->
+    <!-- 
+      INSERT YOUR ACTUAL QUESTIONS HERE 
+      Example structure:
+      <div class="question">Question text...</div>
+      <div class="option" onclick="select(1, 'a', 3)">Yes, fully automated – 3 points</div>
+      etc.
+      Make sure #submit-btn gets enabled when all answered
+    -->
 
     <div class="cta-wrap">
       <button class="cta-btn" id="submit-btn" onclick="showResults()" disabled>
@@ -47,14 +249,12 @@
     </div>
   </div>
 
-  <!-- RESULTS -->
+  <!-- RESULTS SECTION -->
   <div id="results" style="display:none;">
     <div class="results-header">
-      <!-- Score ring, verdict unchanged -->
-    </div>
-
-    <div class="breakdown">
-      <!-- Breakdown bars unchanged -->
+      <!-- Insert your score ring/visual here if you have one -->
+      <h2 id="verdict-title"></h2>
+      <p id="verdict-desc"></p>
     </div>
 
     <!-- Teaser before email gate -->
@@ -64,34 +264,39 @@
       <div id="teaser-gaps"></div>
     </div>
 
-    <!-- Lead Capture Form – NEW -->
+    <!-- Lead Capture Form -->
     <div class="lead-form" id="lead-form">
       <h3>Unlock Your Full Gap Analysis + Personalized Roadmap</h3>
       <p>Get detailed gaps, tailored 3-week sprint recommendations, and a downloadable summary emailed to you (no spam, one-time only).</p>
-      <form action="https://formspree.io/f/your-form-id" method="POST">
+      
+      <form id="lead-capture-form">
         <input type="email" name="email" placeholder="Your work email" required aria-required="true">
         <input type="hidden" name="score" id="hidden-score">
         <input type="hidden" name="verdict" id="hidden-verdict">
-        <!-- Optional: Add score breakdown as hidden if you want segmentation -->
-        <button type="submit">Send My Personalized Report →</button>
+        <button type="submit" id="submit-lead">Send My Personalized Report →</button>
       </form>
-      <p class="teaser" style="margin-top:16px; font-size:13px;">We respect your privacy – only used for your report & one follow-up if requested.</p>
+
+      <div id="form-status" style="margin-top:12px; font-weight:500; min-height:20px;"></div>
+
+      <p class="teaser" style="margin-top:16px; font-size:13px;">
+        We respect your privacy – only used for your report & one follow-up if requested.<br>
+        <a href="#" onclick="showFullResults(); return false;" style="color:var(--grey-400);">Skip & view full results anyway</a>
+      </p>
     </div>
 
-    <!-- Hidden full results – shown only after submit or skip -->
+    <!-- Full detailed results (shown after submit or skip) -->
     <div class="hidden-results" id="full-results">
       <div class="gap-section">
         <div class="breakdown-title">Detailed Key Gaps Identified</div>
         <div id="gaps-container"></div>
       </div>
       <div class="rec-box" id="rec-box">
-        <!-- rec-title, desc, steps unchanged -->
+        <!-- Recommendation content goes here -->
       </div>
       <div class="share-cta">
-        <!-- unchanged, but add Calendly CTA -->
-        <p>Ready to close these gaps fast? Book a free 20-min compliance chat:</p>
-        <a href="https://calendly.com/your-username/20min" target="_blank" class="btn-secondary" style="display:inline-block; text-decoration:none;">
-          <span>📅 Book Free Consultation</span>
+        <p>Ready to close these gaps fast? Book a free compliance audit call:</p>
+        <a href="https://calendly.com/hello-keithan/calendly-com-keithan-audit-gap" target="_blank" class="btn-secondary">
+          <span>📅 Book Free 15-min Audit Gap Call</span>
         </a>
       </div>
     </div>
@@ -99,59 +304,114 @@
     <button class="restart-btn" onclick="restart()">← Retake</button>
   </div>
 
-  <!-- Footer unchanged, but add link to lxdadvisory.de -->
-  <div class="footer">
+  <div class="footer" style="text-align:center; margin-top:60px; color:var(--grey-400); font-size:14px;">
     <p>Built by <strong>Keithan Cokbilir · <a href="https://lxdadvisory.de" style="color:var(--blue-glow);">LXD Advisory</a></strong> · EU AI Act Article 12/19 Specialists</p>
   </div>
 </div>
 
 <script>
-// Your existing JS variables/functions mostly unchanged
+// ------------------------------
+// REPLACE THIS WITH YOUR REAL SCORECARD LOGIC
+// Example placeholder values below – update with actual questions, points, verdict rules, gaps array, etc.
+// ------------------------------
+let total = 0; // Will be calculated from selections
+const gaps = [
+  { title: "Logging not fully automated", desc: "Article 12 requires automatic logging of AI system operations...", type: "high", icon: "⚠️" },
+  { title: "Log retention policy unclear", desc: "Article 19 mandates protection and retention of logs for audit...", type: "medium", icon: "⚠️" },
+  // Add your real gaps here
+];
 
 function showResults() {
-  // Calculate total, sA, sB, sC, verdict logic – unchanged
+  // YOUR REAL SCORING LOGIC GOES HERE
+  // Example placeholder:
+  total = 18; // out of 30 – replace with sum of selected points
+  const verdict = total >= 25 ? "Strong Compliance Position" : total >= 15 ? "Moderate – Action Needed" : "High Risk – Urgent Attention Required";
 
-  // NEW: Show teaser immediately
   document.getElementById('scorecard').style.display = 'none';
   document.getElementById('results').style.display = 'block';
-  // Animate score/ring/verdict as before...
 
-  // Teaser content (simplified version of full)
-  document.getElementById('teaser-verdict').textContent = `Score: ${total}/30 – ${verdictTitle.textContent}. ${verdictDesc.textContent.substring(0,150)}...`;
-  
-  // Show 2-3 top gaps as teaser
-  const teaserGaps = gaps.slice(0,3).map(g => `<div class="gap-card ${g.type}"><div class="gap-icon">${g.icon}</div><div class="gap-content"><h4>${g.title}</h4><p>${g.desc.substring(0,100)}...</p></div></div>`).join('');
-  document.getElementById('teaser-gaps').innerHTML = teaserGaps || '<p class="teaser">Strong position – no major red flags detected in teaser view.</p>';
+  // Update verdict elements (customize IDs/classes as needed)
+  document.getElementById('verdict-title').textContent = verdict;
+  document.getElementById('verdict-desc').textContent = "Brief overview based on score...";
 
-  // Populate hidden full content (gaps, recs) as before
-  // ... your gaps loop and rec logic here ...
+  // Teaser content
+  document.getElementById('teaser-verdict').textContent = `Score: ${total}/30 – ${verdict}. ${"Short teaser description here..."}`;
+  const teaserGapsHtml = gaps.slice(0, 3).map(g => `
+    <div class="gap-card ${g.type}">
+      <div class="gap-icon">${g.icon}</div>
+      <div class="gap-content">
+        <h4>${g.title}</h4>
+        <p>${g.desc.substring(0, 100)}...</p>
+      </div>
+    </div>
+  `).join('');
+  document.getElementById('teaser-gaps').innerHTML = teaserGapsHtml || '<p class="teaser">Strong position – no major red flags detected in teaser view.</p>';
 
-  // Show lead form
-  document.getElementById('lead-form').classList.add('show');
-
-  // Pre-fill hidden fields for better segmentation
+  // Pre-fill hidden fields for Formspree
   document.getElementById('hidden-score').value = total;
-  document.getElementById('hidden-verdict').value = verdictTitle.textContent;
+  document.getElementById('hidden-verdict').value = verdict;
 
-  // Optional: After form submit success (use Formspree webhook or JS listener), show full-results
-  // For simplicity, add skip link:
-  const skipLink = document.createElement('p');
-  skipLink.innerHTML = '<a href="#" onclick="showFullResults(); return false;" style="color:var(--grey-400);">Skip & view full results anyway</a>';
-  document.getElementById('lead-form').appendChild(skipLink);
+  // Show lead capture form
+  document.getElementById('lead-form').classList.add('show');
 }
 
 function showFullResults() {
   document.getElementById('lead-form').style.display = 'none';
   document.getElementById('full-results').classList.add('show');
+
+  // Populate full gaps (customize as needed)
+  const fullGapsHtml = gaps.map(g => `
+    <div class="gap-card ${g.type}">
+      <h4>${g.title}</h4>
+      <p>${g.desc}</p>
+    </div>
+  `).join('');
+  document.getElementById('gaps-container').innerHTML = fullGapsHtml;
 }
 
-// Add form submit listener if you want auto-show full after success (requires more JS)
-document.querySelector('.lead-form form').addEventListener('submit', function(e) {
-  // e.preventDefault(); // if you want AJAX submit + show full
-  // For now, let it POST normally – page reloads or redirect via Formspree thank-you
-});
+function restart() {
+  location.reload();
+}
 
-// ... rest of your JS (updateProgress, select, restart, copyLink) unchanged ...
+// AJAX submission to Formspree
+document.getElementById('lead-capture-form').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  
+  const form = e.target;
+  const statusEl = document.getElementById('form-status');
+  const submitBtn = document.getElementById('submit-lead');
+  
+  statusEl.textContent = 'Sending...';
+  statusEl.style.color = 'var(--blue-bright)';
+  submitBtn.disabled = true;
+  
+  try {
+    const formData = new FormData(form);
+    
+    const response = await fetch('https://formspree.io/f/your-form-id', {  // ← REPLACE WITH YOUR REAL FORMSPREE ENDPOINT
+      method: 'POST',
+      body: formData,
+      headers: { 'Accept': 'application/json' }
+    });
+    
+    if (response.ok) {
+      statusEl.textContent = 'Success! Your personalized report is on its way.';
+      statusEl.style.color = 'var(--green-success)';
+      
+      setTimeout(() => {
+        document.getElementById('lead-form').style.display = 'none';
+        document.getElementById('full-results').classList.add('show');
+      }, 1800);
+    } else {
+      throw new Error('Submission failed – please try again.');
+    }
+  } catch (error) {
+    statusEl.textContent = error.message || 'Something went wrong. Please check your email and try again.';
+    statusEl.style.color = 'var(--red-alert)';
+    submitBtn.disabled = false;
+  }
+});
 </script>
+
 </body>
 </html>
