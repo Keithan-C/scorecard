@@ -946,7 +946,7 @@ document.getElementById('lead-capture-form').addEventListener('submit', async fu
   btn.disabled = true;
 
   try {
-    const res = await fetch('https://formspree.io/f/your-form-id', {  // ← Replace with your Formspree endpoint
+    const res = await fetch('https://formspree.io/f/xykdvvzl', {
       method: 'POST',
       body: new FormData(e.target),
       headers: { 'Accept': 'application/json' }
