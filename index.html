@@ -12,403 +12,956 @@
       --blue-bright: #2563eb;
       --blue-glow: #3b82f6;
       --green-success: #10b981;
+      --amber: #f59e0b;
       --red-alert: #ef4444;
       --grey-400: #9ca3af;
       --grey-600: #4b5563;
       --white: #ffffff;
     }
 
+    * { box-sizing: border-box; }
+
     body {
       margin: 0;
       font-family: 'Outfit', sans-serif;
-      background: linear-gradient(135deg, #0f172a, #1e293b);
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 60%, #0f1f3d 100%);
       color: var(--white);
       line-height: 1.6;
+      min-height: 100vh;
     }
 
     .wrapper {
-      max-width: 900px;
+      max-width: 860px;
       margin: 0 auto;
-      padding: 40px 20px;
+      padding: 40px 20px 80px;
     }
 
+    /* ── HEADER ── */
     .header {
       text-align: center;
-      margin-bottom: 40px;
+      margin-bottom: 48px;
     }
-
     .header-badge {
       display: inline-block;
       background: rgba(37,99,235,0.15);
-      color: var(--blue-bright);
-      padding: 8px 16px;
+      border: 1px solid rgba(37,99,235,0.35);
+      color: #60a5fa;
+      padding: 7px 16px;
       border-radius: 999px;
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 600;
-      margin-bottom: 16px;
+      letter-spacing: 0.05em;
+      margin-bottom: 20px;
     }
-
     h1 {
       font-family: 'DM Serif Display', serif;
-      font-size: 3.2rem;
+      font-size: clamp(2rem, 5vw, 3.4rem);
       margin: 0 0 16px;
+      line-height: 1.15;
     }
-
     h1 em {
       font-style: italic;
       color: var(--grey-400);
     }
+    .header p {
+      color: var(--grey-400);
+      font-size: 16px;
+      max-width: 620px;
+      margin: 0 auto;
+    }
 
+    /* ── PROGRESS ── */
+    .progress-bar-wrap {
+      height: 4px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 99px;
+      margin-bottom: 36px;
+      overflow: hidden;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--blue-bright), #60a5fa);
+      border-radius: 99px;
+      transition: width 0.4s ease;
+      width: 0%;
+    }
+    .progress-label {
+      text-align: right;
+      font-size: 12px;
+      color: var(--grey-400);
+      margin-top: 6px;
+      font-family: 'DM Mono', monospace;
+    }
+
+    /* ── QUESTION BLOCK ── */
+    .question-block {
+      margin-bottom: 36px;
+      animation: fadeUp 0.4s ease both;
+    }
+    .question-num {
+      font-size: 11px;
+      font-family: 'DM Mono', monospace;
+      color: #60a5fa;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .question-text {
+      font-size: 17px;
+      font-weight: 600;
+      margin-bottom: 14px;
+      color: var(--white);
+    }
+    .question-hint {
+      font-size: 13px;
+      color: var(--grey-400);
+      margin-bottom: 14px;
+      font-style: italic;
+    }
+
+    /* ── OPTIONS ── */
     .option {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.09);
       border-radius: 12px;
-      padding: 16px 20px;
-      margin: 12px 0;
+      padding: 14px 18px;
+      margin: 9px 0;
       cursor: pointer;
       transition: all 0.2s;
-      min-height: 48px;
       display: flex;
       align-items: center;
+      gap: 12px;
+      font-size: 15px;
     }
-
     .option:hover {
-      background: rgba(37,99,235,0.12);
-      border-color: var(--blue-bright);
+      background: rgba(37,99,235,0.1);
+      border-color: rgba(37,99,235,0.5);
     }
-
     .option.selected {
-      background: rgba(37,99,235,0.2);
+      background: rgba(37,99,235,0.18);
       border-color: var(--blue-bright);
-      box-shadow: 0 0 0 3px rgba(37,99,235,0.3);
+      box-shadow: 0 0 0 3px rgba(37,99,235,0.2);
+    }
+    .option-dot {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.25);
+      flex-shrink: 0;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .option.selected .option-dot {
+      border-color: var(--blue-bright);
+      background: var(--blue-bright);
+    }
+    .option.selected .option-dot::after {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: white;
     }
 
+    /* ── SECTION DIVIDER ── */
+    .section-divider {
+      border: none;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      margin: 40px 0;
+    }
+    .section-label {
+      font-size: 11px;
+      font-family: 'DM Mono', monospace;
+      color: #60a5fa;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+
+    /* ── CTA ── */
     .cta-wrap {
       text-align: center;
-      margin-top: 40px;
+      margin-top: 48px;
     }
-
     .cta-btn {
-      background: var(--blue-bright);
+      background: linear-gradient(135deg, var(--blue-bright), #1d4ed8);
       color: white;
       border: none;
-      padding: 16px 40px;
-      border-radius: 12px;
-      font-size: 18px;
+      padding: 18px 48px;
+      border-radius: 14px;
+      font-size: 17px;
       font-weight: 600;
       cursor: pointer;
       transition: all 0.3s;
+      box-shadow: 0 4px 24px rgba(37,99,235,0.4);
     }
-
-    .cta-btn:hover {
-      background: #1d4ed8;
+    .cta-btn:hover:not(:disabled) {
       transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(37,99,235,0.55);
     }
-
     .cta-btn:disabled {
-      background: #4b5563;
+      background: #374151;
+      box-shadow: none;
       cursor: not-allowed;
+      opacity: 0.6;
     }
-
     .cta-note {
       color: var(--grey-400);
-      font-size: 14px;
+      font-size: 13px;
       margin-top: 12px;
     }
 
-    #results {
-      background: rgba(255,255,255,0.03);
-      border-radius: 20px;
-      padding: 32px;
-      border: 1px solid rgba(255,255,255,0.08);
-    }
+    /* ── RESULTS ── */
+    #results { display: none; }
 
-    .results-header {
-      text-align: center;
+    .score-ring-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
       margin-bottom: 32px;
     }
+    .score-ring {
+      position: relative;
+      width: 150px;
+      height: 150px;
+    }
+    .score-ring svg {
+      transform: rotate(-90deg);
+    }
+    .score-ring-text {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .score-ring-num {
+      font-family: 'DM Serif Display', serif;
+      font-size: 3rem;
+      line-height: 1;
+    }
+    .score-ring-denom {
+      font-size: 13px;
+      color: var(--grey-400);
+      font-family: 'DM Mono', monospace;
+    }
 
-    .lead-form {
-      background: rgba(37,99,235,0.08);
-      border: 1px solid rgba(37,99,235,0.3);
+    .verdict-badge {
+      display: inline-block;
+      padding: 8px 20px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 14px;
+      letter-spacing: 0.04em;
+      margin-top: 14px;
+    }
+    .verdict-badge.green { background: rgba(16,185,129,0.18); color: var(--green-success); border: 1px solid rgba(16,185,129,0.35); }
+    .verdict-badge.amber { background: rgba(245,158,11,0.15); color: var(--amber); border: 1px solid rgba(245,158,11,0.35); }
+    .verdict-badge.red   { background: rgba(239,68,68,0.15);  color: var(--red-alert);  border: 1px solid rgba(239,68,68,0.35); }
+
+    .verdict-desc {
+      color: var(--grey-400);
+      text-align: center;
+      max-width: 580px;
+      margin: 12px auto 0;
+      font-size: 15px;
+    }
+
+    /* breakdown bars */
+    .breakdown-section {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.07);
       border-radius: 16px;
-      padding: 28px;
-      margin: 32px 0;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+    .breakdown-title {
+      font-weight: 700;
+      font-size: 16px;
+      margin-bottom: 18px;
+      letter-spacing: 0.02em;
+    }
+    .breakdown-row {
+      margin-bottom: 14px;
+    }
+    .breakdown-row-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      margin-bottom: 5px;
+    }
+    .breakdown-row-label { color: var(--white); font-weight: 500; }
+    .breakdown-row-score { color: var(--grey-400); font-family: 'DM Mono', monospace; }
+    .bar-track {
+      height: 6px;
+      background: rgba(255,255,255,0.07);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+    .bar-fill {
+      height: 100%;
+      border-radius: 99px;
+      transition: width 1s ease;
+    }
+    .bar-fill.green { background: linear-gradient(90deg, var(--green-success), #34d399); }
+    .bar-fill.amber { background: linear-gradient(90deg, var(--amber), #fcd34d); }
+    .bar-fill.red   { background: linear-gradient(90deg, var(--red-alert), #f87171); }
+
+    /* gap cards */
+    .gap-card {
+      background: rgba(255,255,255,0.04);
+      border-radius: 12px;
+      padding: 16px 18px;
+      margin: 10px 0;
+      border-left: 3px solid transparent;
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+    }
+    .gap-card.high   { border-left-color: var(--red-alert); }
+    .gap-card.medium { border-left-color: var(--amber); }
+    .gap-card.low    { border-left-color: var(--green-success); }
+    .gap-icon { font-size: 20px; flex-shrink: 0; margin-top: 2px; }
+    .gap-content h4 { margin: 0 0 4px; font-size: 15px; font-weight: 600; }
+    .gap-content p  { margin: 0; font-size: 13px; color: var(--grey-400); line-height: 1.5; }
+
+    /* lead form */
+    .lead-form {
+      background: linear-gradient(135deg, rgba(37,99,235,0.08), rgba(30,41,59,0.8));
+      border: 1px solid rgba(37,99,235,0.3);
+      border-radius: 18px;
+      padding: 32px;
+      margin: 28px 0;
       display: none;
     }
-
-    .lead-form.show {
-      display: block;
-      animation: fadeUp 0.6s ease;
-    }
-
+    .lead-form.show { display: block; animation: fadeUp 0.5s ease; }
+    .lead-form h3 { margin: 0 0 8px; font-size: 20px; }
+    .lead-form p  { color: var(--grey-400); font-size: 14px; margin: 0 0 20px; }
     .lead-form input[type="email"] {
       width: 100%;
-      padding: 14px;
-      margin: 12px 0;
-      border-radius: 8px;
-      border: 1px solid var(--grey-400);
-      background: var(--navy-mid);
+      padding: 14px 16px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.15);
+      background: rgba(10,31,68,0.7);
       color: white;
-      font-size: 16px;
+      font-size: 15px;
+      font-family: 'Outfit', sans-serif;
+      outline: none;
+      transition: border-color 0.2s;
     }
-
+    .lead-form input[type="email"]:focus { border-color: var(--blue-bright); }
     .lead-form button {
-      background: var(--blue-bright);
+      background: linear-gradient(135deg, var(--blue-bright), #1d4ed8);
       color: white;
       border: none;
-      padding: 14px 28px;
+      padding: 15px 28px;
       border-radius: 10px;
       font-weight: 600;
       cursor: pointer;
       width: 100%;
       margin-top: 12px;
-      font-size: 16px;
-    }
-
-    .teaser {
-      font-style: italic;
-      color: var(--grey-400);
-      margin: 16px 0;
       font-size: 15px;
+      font-family: 'Outfit', sans-serif;
+      transition: all 0.2s;
     }
+    .lead-form button:hover { opacity: 0.9; }
+    .lead-form button:disabled { opacity: 0.5; cursor: not-allowed; }
+    .skip-link { font-size: 13px; color: var(--grey-400); text-align: center; margin-top: 14px; }
+    .skip-link a { color: var(--grey-400); text-decoration: underline; cursor: pointer; }
 
-    .hidden-results {
-      display: none;
-      opacity: 0;
-      transition: opacity 0.8s;
+    .hidden-results { display: none; }
+    .hidden-results.show { display: block; animation: fadeUp 0.5s ease; }
+
+    /* rec box */
+    .rec-box {
+      background: rgba(16,185,129,0.07);
+      border: 1px solid rgba(16,185,129,0.25);
+      border-radius: 14px;
+      padding: 24px;
+      margin: 20px 0;
     }
+    .rec-box h3 { margin: 0 0 12px; font-size: 17px; color: var(--green-success); }
+    .rec-box ul { margin: 0; padding-left: 18px; }
+    .rec-box li { color: var(--grey-400); font-size: 14px; margin-bottom: 6px; line-height: 1.5; }
 
-    .hidden-results.show {
-      display: block;
-      opacity: 1;
+    .share-cta {
+      text-align: center;
+      margin: 28px 0;
     }
-
-    .gap-card {
-      background: rgba(255,255,255,0.05);
-      border-radius: 12px;
-      padding: 16px;
-      margin: 12px 0;
-    }
-
+    .share-cta p { color: var(--grey-400); margin-bottom: 14px; }
     .btn-secondary {
-      background: rgba(37,99,235,0.15);
-      color: var(--blue-bright);
-      padding: 12px 24px;
-      border-radius: 10px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(37,99,235,0.12);
+      border: 1px solid rgba(37,99,235,0.4);
+      color: #60a5fa;
+      padding: 14px 28px;
+      border-radius: 12px;
       text-decoration: none;
       font-weight: 600;
-      display: inline-block;
-      margin-top: 16px;
+      font-size: 15px;
+      transition: all 0.2s;
     }
+    .btn-secondary:hover { background: rgba(37,99,235,0.22); transform: translateY(-1px); }
 
     .restart-btn {
       background: transparent;
-      border: 1px solid var(--grey-400);
+      border: 1px solid rgba(255,255,255,0.15);
       color: var(--grey-400);
       padding: 12px 24px;
       border-radius: 10px;
       cursor: pointer;
       margin-top: 32px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 14px;
+      transition: all 0.2s;
     }
+    .restart-btn:hover { border-color: rgba(255,255,255,0.3); color: white; }
+
+    .footer {
+      text-align: center;
+      margin-top: 60px;
+      color: var(--grey-400);
+      font-size: 13px;
+    }
+    .footer a { color: var(--blue-glow); text-decoration: none; }
 
     @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
     }
 
-    /* Add your original styles for progress, score ring, breakdown bars, etc. here */
+    #form-status { margin-top: 12px; font-weight: 500; min-height: 20px; font-size: 14px; }
   </style>
 </head>
 <body>
-
 <div class="wrapper">
-  <!-- SCORECARD FORM -->
+
+  <!-- ═══════════ SCORECARD ═══════════ -->
   <div id="scorecard">
     <div class="header">
       <div class="header-badge">EU AI Act Diagnostic · Enforcement Aug 2026</div>
-      <h1>Article 12 & 19<br><em>Logging & Control</em> Readiness Scorecard</h1>
+      <h1>Article 12 &amp; 19<br><em>Logging &amp; Control</em> Readiness Scorecard</h1>
       <p>3-minute self-assessment for automotive ADAS, OTA, and connected vehicle teams. Checks automatic logging (Art. 12), log protection/retention (Art. 19), and audit preparedness.</p>
     </div>
 
-    <!-- 
-      INSERT YOUR ACTUAL QUESTIONS HERE 
-      Example structure:
-      <div class="question">Question text...</div>
-      <div class="option" onclick="select(1, 'a', 3)">Yes, fully automated – 3 points</div>
-      etc.
-      Make sure #submit-btn gets enabled when all answered
-    -->
+    <div class="progress-bar-wrap">
+      <div class="progress-bar-fill" id="progress-fill"></div>
+    </div>
+    <div class="progress-label" id="progress-label">0 / 10 answered</div>
+
+    <!-- ── SECTION A: Article 12 – Automatic Logging ── -->
+    <div class="section-label">Section A · Article 12 — Automatic Logging</div>
+
+    <div class="question-block">
+      <div class="question-num">Question 01</div>
+      <div class="question-text">Does your AI system automatically generate event logs without requiring manual activation?</div>
+      <div class="question-hint">Art. 12 requires logging to be automatic and continuous during operation.</div>
+      <div class="options" data-q="1">
+        <div class="option" onclick="selectOption(1,'a',3)"><div class="option-dot"></div> Yes – logging is always-on and fully automated</div>
+        <div class="option" onclick="selectOption(1,'b',2)"><div class="option-dot"></div> Partially – automated in most scenarios, manual steps exist</div>
+        <div class="option" onclick="selectOption(1,'c',1)"><div class="option-dot"></div> Logging exists but requires manual triggering</div>
+        <div class="option" onclick="selectOption(1,'d',0)"><div class="option-dot"></div> No systematic logging in place</div>
+      </div>
+    </div>
+
+    <div class="question-block">
+      <div class="question-num">Question 02</div>
+      <div class="question-text">Which AI system events does your logging infrastructure capture?</div>
+      <div class="question-hint">Art. 12 requires capturing inputs, decisions, outputs, and anomalies.</div>
+      <div class="options" data-q="2">
+        <div class="option" onclick="selectOption(2,'a',3)"><div class="option-dot"></div> All: inputs, outputs, decisions, anomalies, and system state changes</div>
+        <div class="option" onclick="selectOption(2,'b',2)"><div class="option-dot"></div> Most categories, but some gaps (e.g. anomalies not always logged)</div>
+        <div class="option" onclick="selectOption(2,'c',1)"><div class="option-dot"></div> Only high-level outputs or errors</div>
+        <div class="option" onclick="selectOption(2,'d',0)"><div class="option-dot"></div> Event capture is ad-hoc or undefined</div>
+      </div>
+    </div>
+
+    <div class="question-block">
+      <div class="question-num">Question 03</div>
+      <div class="question-text">Do your logs include accurate timestamps and version identifiers for the AI model in use?</div>
+      <div class="question-hint">Timestamps and model versioning are essential for post-incident audit trails.</div>
+      <div class="options" data-q="3">
+        <div class="option" onclick="selectOption(3,'a',3)"><div class="option-dot"></div> Yes – all logs include UTC timestamps and model version/hash</div>
+        <div class="option" onclick="selectOption(3,'b',2)"><div class="option-dot"></div> Timestamps yes, model versioning inconsistent</div>
+        <div class="option" onclick="selectOption(3,'c',1)"><div class="option-dot"></div> Partial – timestamps only, or version metadata missing</div>
+        <div class="option" onclick="selectOption(3,'d',0)"><div class="option-dot"></div> No structured metadata in logs</div>
+      </div>
+    </div>
+
+    <hr class="section-divider">
+
+    <!-- ── SECTION B: Article 19 – Log Protection & Retention ── -->
+    <div class="section-label">Section B · Article 19 — Log Protection &amp; Retention</div>
+
+    <div class="question-block">
+      <div class="question-num">Question 04</div>
+      <div class="question-text">How long are AI system logs retained, and is that policy documented?</div>
+      <div class="question-hint">Art. 19 requires retention for the system's lifetime plus typically ≥ 6 months post-deployment.</div>
+      <div class="options" data-q="4">
+        <div class="option" onclick="selectOption(4,'a',3)"><div class="option-dot"></div> Documented policy: retained for full deployment lifetime + post-sunset period</div>
+        <div class="option" onclick="selectOption(4,'b',2)"><div class="option-dot"></div> Retained &gt;12 months, no formal policy document</div>
+        <div class="option" onclick="selectOption(4,'c',1)"><div class="option-dot"></div> Retained &lt;6 months or policy is unclear</div>
+        <div class="option" onclick="selectOption(4,'d',0)"><div class="option-dot"></div> No retention policy exists</div>
+      </div>
+    </div>
+
+    <div class="question-block">
+      <div class="question-num">Question 05</div>
+      <div class="question-text">Are logs protected against tampering, deletion, or unauthorised access?</div>
+      <div class="question-hint">Art. 19 mandates integrity controls – logs used as audit evidence must be immutable.</div>
+      <div class="options" data-q="5">
+        <div class="option" onclick="selectOption(5,'a',3)"><div class="option-dot"></div> Yes – write-once storage, cryptographic signing, or WORM compliance</div>
+        <div class="option" onclick="selectOption(5,'b',2)"><div class="option-dot"></div> Access controls exist but logs are not cryptographically protected</div>
+        <div class="option" onclick="selectOption(5,'c',1)"><div class="option-dot"></div> Basic file-level permissions only</div>
+        <div class="option" onclick="selectOption(5,'d',0)"><div class="option-dot"></div> No integrity controls in place</div>
+      </div>
+    </div>
+
+    <div class="question-block">
+      <div class="question-num">Question 06</div>
+      <div class="question-text">Do you maintain separate logs for OTA update events and ADAS decision records?</div>
+      <div class="question-hint">Automotive high-risk systems require traceability of both software changes and real-time AI decisions.</div>
+      <div class="options" data-q="6">
+        <div class="option" onclick="selectOption(6,'a',3)"><div class="option-dot"></div> Yes – OTA and ADAS logs are separate, structured, and searchable</div>
+        <div class="option" onclick="selectOption(6,'b',2)"><div class="option-dot"></div> Combined logs exist but OTA / ADAS events are tagged differently</div>
+        <div class="option" onclick="selectOption(6,'c',1)"><div class="option-dot"></div> Only one type is captured systematically</div>
+        <div class="option" onclick="selectOption(6,'d',0)"><div class="option-dot"></div> No distinction between system types in logs</div>
+      </div>
+    </div>
+
+    <hr class="section-divider">
+
+    <!-- ── SECTION C: Audit Preparedness ── -->
+    <div class="section-label">Section C · Audit Preparedness</div>
+
+    <div class="question-block">
+      <div class="question-num">Question 07</div>
+      <div class="question-text">Has your team conducted a structured internal audit or gap assessment against Art. 12/19 requirements?</div>
+      <div class="options" data-q="7">
+        <div class="option" onclick="selectOption(7,'a',3)"><div class="option-dot"></div> Yes – formal assessment completed with remediation roadmap</div>
+        <div class="option" onclick="selectOption(7,'b',2)"><div class="option-dot"></div> Informal review done; no documented output</div>
+        <div class="option" onclick="selectOption(7,'c',1)"><div class="option-dot"></div> Planned but not yet started</div>
+        <div class="option" onclick="selectOption(7,'d',0)"><div class="option-dot"></div> No assessment conducted or planned</div>
+      </div>
+    </div>
+
+    <div class="question-block">
+      <div class="question-num">Question 08</div>
+      <div class="question-text">Can your team produce a structured audit package (logs + config + model card) within 48 hours of a regulatory request?</div>
+      <div class="question-hint">Enforcement reality: market surveillance authorities may request evidence with short notice.</div>
+      <div class="options" data-q="8">
+        <div class="option" onclick="selectOption(8,'a',3)"><div class="option-dot"></div> Yes – audit package is documented and can be assembled rapidly</div>
+        <div class="option" onclick="selectOption(8,'b',2)"><div class="option-dot"></div> Most artefacts exist, but assembly would take 3–7 days</div>
+        <div class="option" onclick="selectOption(8,'c',1)"><div class="option-dot"></div> Artefacts are incomplete or scattered across teams</div>
+        <div class="option" onclick="selectOption(8,'d',0)"><div class="option-dot"></div> No audit readiness capability in place</div>
+      </div>
+    </div>
+
+    <div class="question-block">
+      <div class="question-num">Question 09</div>
+      <div class="question-text">Is there a designated person (AI Compliance Officer or equivalent) responsible for log oversight and regulatory reporting?</div>
+      <div class="options" data-q="9">
+        <div class="option" onclick="selectOption(9,'a',3)"><div class="option-dot"></div> Yes – named role with defined responsibilities and escalation path</div>
+        <div class="option" onclick="selectOption(9,'b',2)"><div class="option-dot"></div> Responsibility exists but shared informally across functions</div>
+        <div class="option" onclick="selectOption(9,'c',1)"><div class="option-dot"></div> No owner – ad-hoc when issues arise</div>
+        <div class="option" onclick="selectOption(9,'d',0)"><div class="option-dot"></div> Not yet considered</div>
+      </div>
+    </div>
+
+    <div class="question-block">
+      <div class="question-num">Question 10</div>
+      <div class="question-text">Have you mapped your logging infrastructure to specific Art. 12/19 obligations in a controls register or traceability matrix?</div>
+      <div class="question-hint">A traceability matrix links each legal requirement to a specific technical or process control.</div>
+      <div class="options" data-q="10">
+        <div class="option" onclick="selectOption(10,'a',3)"><div class="option-dot"></div> Yes – controls are mapped, reviewed, and version-controlled</div>
+        <div class="option" onclick="selectOption(10,'b',2)"><div class="option-dot"></div> Partial mapping exists in spreadsheets or informal docs</div>
+        <div class="option" onclick="selectOption(10,'c',1)"><div class="option-dot"></div> No mapping, but we understand the obligations</div>
+        <div class="option" onclick="selectOption(10,'d',0)"><div class="option-dot"></div> No mapping or awareness</div>
+      </div>
+    </div>
 
     <div class="cta-wrap">
       <button class="cta-btn" id="submit-btn" onclick="showResults()" disabled>
-        <span>See My Compliance Score & Gaps</span>
-        <span>→</span>
+        See My Compliance Score &amp; Gaps →
       </button>
-      <p class="cta-note">Answer all questions for personalized results</p>
+      <p class="cta-note">Answer all 10 questions for personalised results</p>
     </div>
   </div>
+  <!-- end #scorecard -->
 
-  <!-- RESULTS SECTION -->
-  <div id="results" style="display:none;">
-    <div class="results-header">
-      <!-- Insert your score ring/visual here if you have one -->
-      <h2 id="verdict-title"></h2>
-      <p id="verdict-desc"></p>
+  <!-- ═══════════ RESULTS ═══════════ -->
+  <div id="results">
+
+    <div style="text-align:center; margin-bottom:32px;">
+      <div class="score-ring-wrap">
+        <div class="score-ring">
+          <svg width="150" height="150" viewBox="0 0 150 150">
+            <circle cx="75" cy="75" r="62" fill="none" stroke="rgba(255,255,255,0.07)" stroke-width="10"/>
+            <circle id="ring-circle" cx="75" cy="75" r="62" fill="none" stroke="#2563eb"
+              stroke-width="10" stroke-linecap="round"
+              stroke-dasharray="389.6" stroke-dashoffset="389.6"
+              style="transition: stroke-dashoffset 1.2s ease, stroke 0.8s ease;"/>
+          </svg>
+          <div class="score-ring-text">
+            <span class="score-ring-num" id="score-display">0</span>
+            <span class="score-ring-denom">/30</span>
+          </div>
+        </div>
+      </div>
+      <div class="verdict-badge" id="verdict-badge">—</div>
+      <p class="verdict-desc" id="verdict-desc"></p>
     </div>
 
-    <!-- Teaser before email gate -->
-    <div class="gap-section">
-      <div class="breakdown-title">Your Key Verdict & Teaser Gaps</div>
-      <p id="teaser-verdict" class="teaser"></p>
+    <!-- Breakdown by section -->
+    <div class="breakdown-section">
+      <div class="breakdown-title">Score Breakdown by Section</div>
+
+      <div class="breakdown-row">
+        <div class="breakdown-row-header">
+          <span class="breakdown-row-label">Art. 12 — Automatic Logging</span>
+          <span class="breakdown-row-score" id="sec-a-score">0/9</span>
+        </div>
+        <div class="bar-track"><div class="bar-fill" id="bar-a" style="width:0%"></div></div>
+      </div>
+
+      <div class="breakdown-row">
+        <div class="breakdown-row-header">
+          <span class="breakdown-row-label">Art. 19 — Log Protection &amp; Retention</span>
+          <span class="breakdown-row-score" id="sec-b-score">0/9</span>
+        </div>
+        <div class="bar-track"><div class="bar-fill" id="bar-b" style="width:0%"></div></div>
+      </div>
+
+      <div class="breakdown-row">
+        <div class="breakdown-row-header">
+          <span class="breakdown-row-label">Audit Preparedness</span>
+          <span class="breakdown-row-score" id="sec-c-score">0/12</span>
+        </div>
+        <div class="bar-track"><div class="bar-fill" id="bar-c" style="width:0%"></div></div>
+      </div>
+    </div>
+
+    <!-- Teaser gaps (always visible) -->
+    <div class="breakdown-section">
+      <div class="breakdown-title">Your Key Gaps (Preview)</div>
       <div id="teaser-gaps"></div>
     </div>
 
-    <!-- Lead Capture Form -->
-    <div class="lead-form" id="lead-form">
-      <h3>Unlock Your Full Gap Analysis + Personalized Roadmap</h3>
+    <!-- Lead capture -->
+    <div class="lead-form show" id="lead-form">
+      <h3>Unlock Your Full Gap Analysis + Personalised Roadmap</h3>
       <p>Get detailed gaps, tailored 3-week sprint recommendations, and a downloadable summary emailed to you (no spam, one-time only).</p>
-      
       <form id="lead-capture-form">
-        <input type="email" name="email" placeholder="Your work email" required aria-required="true">
+        <input type="email" name="email" placeholder="Your work email" required>
         <input type="hidden" name="score" id="hidden-score">
         <input type="hidden" name="verdict" id="hidden-verdict">
-        <button type="submit" id="submit-lead">Send My Personalized Report →</button>
+        <input type="hidden" name="breakdown" id="hidden-breakdown">
+        <button type="submit" id="submit-lead">Send My Personalised Report →</button>
       </form>
-
-      <div id="form-status" style="margin-top:12px; font-weight:500; min-height:20px;"></div>
-
-      <p class="teaser" style="margin-top:16px; font-size:13px;">
-        We respect your privacy – only used for your report & one follow-up if requested.<br>
-        <a href="#" onclick="showFullResults(); return false;" style="color:var(--grey-400);">Skip & view full results anyway</a>
+      <div id="form-status"></div>
+      <p class="skip-link">We respect your privacy – one-time report delivery only.<br>
+        <a onclick="showFullResults(); return false;">Skip &amp; view full results anyway</a>
       </p>
     </div>
 
-    <!-- Full detailed results (shown after submit or skip) -->
+    <!-- Full results (post email or skip) -->
     <div class="hidden-results" id="full-results">
-      <div class="gap-section">
-        <div class="breakdown-title">Detailed Key Gaps Identified</div>
+
+      <div class="breakdown-section">
+        <div class="breakdown-title">All Identified Gaps</div>
         <div id="gaps-container"></div>
       </div>
-      <div class="rec-box" id="rec-box">
-        <!-- Recommendation content goes here -->
-      </div>
+
+      <div class="rec-box" id="rec-box"></div>
+
       <div class="share-cta">
         <p>Ready to close these gaps fast? Book a free compliance audit call:</p>
         <a href="https://calendly.com/hello-keithan/calendly-com-keithan-audit-gap" target="_blank" class="btn-secondary">
-          <span>📅 Book Free 15-min Audit Gap Call</span>
+          📅 Book Free 15-min Audit Gap Call
         </a>
       </div>
     </div>
 
-    <button class="restart-btn" onclick="restart()">← Retake</button>
+    <div style="text-align:center;">
+      <button class="restart-btn" onclick="restart()">← Retake Assessment</button>
+    </div>
   </div>
+  <!-- end #results -->
 
-  <div class="footer" style="text-align:center; margin-top:60px; color:var(--grey-400); font-size:14px;">
-    <p>Built by <strong>Keithan Cokbilir · <a href="https://lxdadvisory.de" style="color:var(--blue-glow);">LXD Advisory</a></strong> · EU AI Act Article 12/19 Specialists</p>
+  <div class="footer">
+    <p>Built by <strong>Keithan Cokbilir · <a href="https://lxdadvisory.de" target="_blank">LXD Advisory</a></strong> · EU AI Act Article 12/19 Specialists</p>
   </div>
 </div>
 
 <script>
-// ------------------------------
-// REPLACE THIS WITH YOUR REAL SCORECARD LOGIC
-// Example placeholder values below – update with actual questions, points, verdict rules, gaps array, etc.
-// ------------------------------
-let total = 0; // Will be calculated from selections
-const gaps = [
-  { title: "Logging not fully automated", desc: "Article 12 requires automatic logging of AI system operations...", type: "high", icon: "⚠️" },
-  { title: "Log retention policy unclear", desc: "Article 19 mandates protection and retention of logs for audit...", type: "medium", icon: "⚠️" },
-  // Add your real gaps here
-];
+// ─── State ───────────────────────────────────────────────────────────────────
+const TOTAL_QUESTIONS = 10;
+const answers = {}; // { qNum: points }
 
+// Section mapping: which question numbers belong to each section
+const SEC_A = [1,2,3];   // max 9
+const SEC_B = [4,5,6];   // max 9
+const SEC_C = [7,8,9,10]; // max 12
+
+// ─── Gap definitions keyed by [question][answer tier] ───────────────────────
+// Each entry has title, desc, severity (high/medium/low)
+// We only add a gap if the answer is < max (3 pts)
+const GAP_MAP = {
+  1: {
+    b: { title: "Partial logging automation (Q1)", desc: "Manual steps in your logging pipeline create blind spots. Art. 12 requires continuous, automatic capture of all operational events without human intervention. Automate remaining triggers in your log orchestration layer.", sev: "medium" },
+    c: { title: "Manual-only logging (Q1)", desc: "Manual log triggering is non-compliant with Art. 12. Regulators expect automatic, tamper-resistant capture. Prioritise integrating an event-driven logging framework (e.g. OpenTelemetry, structured syslog pipeline).", sev: "high" },
+    d: { title: "No logging system in place (Q1)", desc: "Absence of any logging is a critical Art. 12 gap and likely blocks market authorisation. Immediate remediation required: implement an always-on log collector before next compliance milestone.", sev: "high" },
+  },
+  2: {
+    b: { title: "Incomplete event coverage (Q2)", desc: "Anomaly detection logs are commonly missing. Art. 12 specifically requires capturing system anomalies and unexpected outputs. Extend your log schema to include anomaly classifiers and confidence-threshold breach events.", sev: "medium" },
+    c: { title: "Sparse event capture (Q2)", desc: "Logging only errors or high-level outputs is insufficient. Input vectors and AI decision paths must be captured for each inference cycle to support post-incident investigation.", sev: "high" },
+    d: { title: "Ad-hoc event capture (Q2)", desc: "Undefined event capture means your logs cannot serve as audit evidence. Define a structured log schema aligned with ISO/IEC 42001 and ENISA AI security guidelines.", sev: "high" },
+  },
+  3: {
+    b: { title: "Inconsistent model versioning in logs (Q3)", desc: "Timestamps alone are insufficient. Without model version hashes in each log entry, you cannot prove which model produced a given output — a critical gap for incident attribution.", sev: "medium" },
+    c: { title: "Incomplete log metadata (Q3)", desc: "Missing timestamps or version data significantly weakens your audit trail. Regulators will expect a continuous, timestamped record tied to a specific model build.", sev: "high" },
+    d: { title: "No structured metadata in logs (Q3)", desc: "Without timestamps and versioning, logs are legally unreliable as evidence. Implement structured logging (JSON/CBOR) with mandatory metadata fields immediately.", sev: "high" },
+  },
+  4: {
+    b: { title: "Undocumented retention policy (Q4)", desc: "Retaining logs without a documented policy creates compliance risk. Formalise your retention schedule in a data management policy and link it to your Art. 19 controls register.", sev: "medium" },
+    c: { title: "Insufficient log retention period (Q4)", desc: "Retention under 6 months is likely non-compliant with Art. 19 for high-risk AI systems. Extend retention and document the rationale including post-deployment sunset periods.", sev: "high" },
+    d: { title: "No log retention policy (Q4)", desc: "Without a retention policy, logs may be deleted before regulatory review is possible. This is a direct Art. 19 gap. Draft and implement a retention schedule this sprint.", sev: "high" },
+  },
+  5: {
+    b: { title: "Logs lack cryptographic integrity protection (Q5)", desc: "Access controls help but do not prove logs are unmodified. Implement hash-chaining, digital signatures, or WORM storage to meet Art. 19's integrity expectations for audit evidence.", sev: "medium" },
+    c: { title: "Insufficient log protection (Q5)", desc: "File permissions can be bypassed by administrators. Art. 19 implies stronger integrity guarantees. Move logs to append-only, access-audited storage as a minimum step.", sev: "high" },
+    d: { title: "No log integrity controls (Q5)", desc: "Unprotected logs cannot be used as reliable audit evidence and expose you to regulatory challenge. Cryptographic signing or WORM compliance is required — treat as a P0 remediation.", sev: "high" },
+  },
+  6: {
+    b: { title: "OTA/ADAS logs not fully separated (Q6)", desc: "Tagging is a start, but mixing log streams makes query and audit workflows complex. Separate log destinations or namespaces are strongly recommended for automotive AI systems.", sev: "medium" },
+    c: { title: "Incomplete OTA or ADAS logging (Q6)", desc: "Capturing only one type of system event leaves a gap. For connected vehicle compliance, both OTA software update events and real-time ADAS decision records must be independently traceable.", sev: "high" },
+    d: { title: "No separation of system log types (Q6)", desc: "Mixed or absent log categorisation makes it impossible to reconstruct specific ADAS decision sequences or OTA rollout history for auditors. Restructure your log architecture.", sev: "high" },
+  },
+  7: {
+    b: { title: "No documented gap assessment output (Q7)", desc: "Informal reviews are not sufficient evidence of due diligence. Document your Art. 12/19 gap findings, assign owners, and produce a remediation roadmap — even a structured spreadsheet counts.", sev: "medium" },
+    c: { title: "Gap assessment not yet conducted (Q7)", desc: "A planned but unstarted assessment leaves you exposed. With enforcement from Aug 2026, you should complete your Art. 12/19 gap review within the next 30 days.", sev: "high" },
+    d: { title: "No compliance assessment conducted or planned (Q7)", desc: "This is a significant governance gap. Without a baseline assessment, you cannot prioritise remediation. Start with a structured self-assessment using ENISA's AI Act compliance checklist.", sev: "high" },
+  },
+  8: {
+    b: { title: "Audit package assembly takes too long (Q8)", desc: "3–7 day assembly time is a risk. Market surveillance authorities may issue short-notice requests. Pre-assemble your audit package — logs, model card, config — and keep it current.", sev: "medium" },
+    c: { title: "Incomplete audit artefacts (Q8)", desc: "Scattered or incomplete artefacts will delay your response to regulators. Assign an owner to consolidate your audit package and identify which artefacts are missing.", sev: "high" },
+    d: { title: "No audit readiness capability (Q8)", desc: "You currently cannot respond to a regulatory information request. This is a critical risk. Build a minimal audit pack (logs + model card + system description) within the next sprint.", sev: "high" },
+  },
+  9: {
+    b: { title: "Shared/informal compliance ownership (Q9)", desc: "Shared informal responsibility often means no one acts in a regulatory incident. Formalise a named AI compliance lead with documented responsibilities and board-level escalation path.", sev: "medium" },
+    c: { title: "No designated compliance owner (Q9)", desc: "Ad-hoc ownership creates accountability gaps. The EU AI Act implies clear human oversight and responsibility chains. Appoint a named owner for AI compliance this quarter.", sev: "high" },
+    d: { title: "Compliance ownership not yet considered (Q9)", desc: "Governance is a foundational requirement of the AI Act. Designating responsibility is the first step toward systemic compliance. Start with a RACI matrix for your AI system controls.", sev: "high" },
+  },
+  10: {
+    b: { title: "Informal traceability only (Q10)", desc: "Spreadsheet-based mapping is fragile. Move your controls register to a versioned format (Markdown, Notion, or a GRC tool) with owner and review-date fields to maintain regulatory defensibility.", sev: "medium" },
+    c: { title: "No controls-to-obligations mapping (Q10)", desc: "Understanding obligations without mapping them to controls means gaps go undetected. Build a traceability matrix linking each Art. 12/19 clause to a specific technical or process control.", sev: "high" },
+    d: { title: "No obligations awareness or mapping (Q10)", desc: "Without awareness of the specific legal requirements, it is impossible to demonstrate compliance. Obtain the AI Act text, identify applicable clauses for your system, and begin mapping immediately.", sev: "high" },
+  },
+};
+
+// ─── Select an option ────────────────────────────────────────────────────────
+function selectOption(qNum, tier, points) {
+  answers[qNum] = { tier, points };
+
+  // Update UI for this question
+  const block = document.querySelector(`.options[data-q="${qNum}"]`);
+  block.querySelectorAll('.option').forEach(el => el.classList.remove('selected'));
+  event.currentTarget.classList.add('selected');
+
+  updateProgress();
+}
+
+function updateProgress() {
+  const answered = Object.keys(answers).length;
+  const pct = (answered / TOTAL_QUESTIONS) * 100;
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-label').textContent = `${answered} / ${TOTAL_QUESTIONS} answered`;
+
+  const btn = document.getElementById('submit-btn');
+  btn.disabled = answered < TOTAL_QUESTIONS;
+}
+
+// ─── Calculate scores ────────────────────────────────────────────────────────
+function calcScores() {
+  let total = 0, secA = 0, secB = 0, secC = 0;
+  for (const q of SEC_A) secA += (answers[q]?.points ?? 0);
+  for (const q of SEC_B) secB += (answers[q]?.points ?? 0);
+  for (const q of SEC_C) secC += (answers[q]?.points ?? 0);
+  total = secA + secB + secC;
+  return { total, secA, secB, secC };
+}
+
+// ─── Collect gaps ────────────────────────────────────────────────────────────
+function collectGaps() {
+  const gaps = [];
+  for (let q = 1; q <= TOTAL_QUESTIONS; q++) {
+    const a = answers[q];
+    if (!a) continue;
+    if (a.points < 3 && GAP_MAP[q] && GAP_MAP[q][a.tier]) {
+      gaps.push({ ...GAP_MAP[q][a.tier], q });
+    }
+  }
+  // Sort: high first
+  const order = { high: 0, medium: 1, low: 2 };
+  gaps.sort((a, b) => order[a.sev] - order[b.sev]);
+  return gaps;
+}
+
+// ─── Show results ────────────────────────────────────────────────────────────
 function showResults() {
-  // YOUR REAL SCORING LOGIC GOES HERE
-  // Example placeholder:
-  total = 18; // out of 30 – replace with sum of selected points
-  const verdict = total >= 25 ? "Strong Compliance Position" : total >= 15 ? "Moderate – Action Needed" : "High Risk – Urgent Attention Required";
+  const { total, secA, secB, secC } = calcScores();
+  const gaps = collectGaps();
 
+  // Hide scorecard
   document.getElementById('scorecard').style.display = 'none';
   document.getElementById('results').style.display = 'block';
 
-  // Update verdict elements (customize IDs/classes as needed)
-  document.getElementById('verdict-title').textContent = verdict;
-  document.getElementById('verdict-desc').textContent = "Brief overview based on score...";
+  // Score ring animation
+  const circumference = 2 * Math.PI * 62; // ≈ 389.6
+  const offset = circumference - (total / 30) * circumference;
+  const ring = document.getElementById('ring-circle');
+  const color = total >= 24 ? '#10b981' : total >= 15 ? '#f59e0b' : '#ef4444';
+  setTimeout(() => {
+    ring.style.strokeDashoffset = offset;
+    ring.style.stroke = color;
+  }, 100);
 
-  // Teaser content
-  document.getElementById('teaser-verdict').textContent = `Score: ${total}/30 – ${verdict}. ${"Short teaser description here..."}`;
-  const teaserGapsHtml = gaps.slice(0, 3).map(g => `
-    <div class="gap-card ${g.type}">
-      <div class="gap-icon">${g.icon}</div>
+  // Score number
+  animateCount('score-display', 0, total, 1200);
+
+  // Verdict
+  let verdictText, verdictClass, verdictDesc;
+  if (total >= 24) {
+    verdictText = 'Strong Compliance Position';
+    verdictClass = 'green';
+    verdictDesc = 'Your infrastructure shows solid Art. 12/19 alignment. Focus on formalising documentation and closing the remaining gaps before August 2026 enforcement.';
+  } else if (total >= 15) {
+    verdictText = 'Moderate – Action Required';
+    verdictClass = 'amber';
+    verdictDesc = 'You have foundational controls in place but critical gaps remain. A structured 6–8 week remediation sprint is recommended before enforcement begins.';
+  } else {
+    verdictText = 'High Risk – Urgent Attention Required';
+    verdictClass = 'red';
+    verdictDesc = 'Significant gaps across logging, protection, and governance put you at high regulatory risk. Immediate prioritisation of Art. 12/19 controls is essential.';
+  }
+  const badge = document.getElementById('verdict-badge');
+  badge.textContent = verdictText;
+  badge.className = `verdict-badge ${verdictClass}`;
+  document.getElementById('verdict-desc').textContent = verdictDesc;
+
+  // Section bars
+  setBar('sec-a-score', 'bar-a', secA, 9);
+  setBar('sec-b-score', 'bar-b', secB, 9);
+  setBar('sec-c-score', 'bar-c', secC, 12);
+
+  // Teaser: show top 2 high gaps (or first 2)
+  const teaserGaps = gaps.slice(0, 2);
+  document.getElementById('teaser-gaps').innerHTML = teaserGaps.length
+    ? teaserGaps.map(g => gapCardHTML(g, true)).join('')
+    : '<p style="color:var(--grey-400); font-style:italic;">No major gaps detected — well done!</p>';
+
+  // Hidden fields for Formspree
+  document.getElementById('hidden-score').value = `${total}/30`;
+  document.getElementById('hidden-verdict').value = verdictText;
+  document.getElementById('hidden-breakdown').value = `Art.12: ${secA}/9 | Art.19: ${secB}/9 | Audit: ${secC}/12`;
+
+  // Store gaps for later full render
+  window._gaps = gaps;
+  window._recText = buildRec(total, secA, secB, secC);
+}
+
+function setBar(scoreId, barId, score, max) {
+  const pct = Math.round((score / max) * 100);
+  document.getElementById(scoreId).textContent = `${score}/${max}`;
+  const barClass = pct >= 80 ? 'green' : pct >= 50 ? 'amber' : 'red';
+  const bar = document.getElementById(barId);
+  bar.className = `bar-fill ${barClass}`;
+  setTimeout(() => bar.style.width = pct + '%', 200);
+}
+
+function gapCardHTML(gap, teaser = false) {
+  const icon = gap.sev === 'high' ? '🔴' : gap.sev === 'medium' ? '🟡' : '🟢';
+  const desc = teaser ? gap.desc.substring(0, 120) + '…' : gap.desc;
+  return `
+    <div class="gap-card ${gap.sev}">
+      <div class="gap-icon">${icon}</div>
       <div class="gap-content">
-        <h4>${g.title}</h4>
-        <p>${g.desc.substring(0, 100)}...</p>
+        <h4>${gap.title}</h4>
+        <p>${desc}</p>
       </div>
-    </div>
-  `).join('');
-  document.getElementById('teaser-gaps').innerHTML = teaserGapsHtml || '<p class="teaser">Strong position – no major red flags detected in teaser view.</p>';
+    </div>`;
+}
 
-  // Pre-fill hidden fields for Formspree
-  document.getElementById('hidden-score').value = total;
-  document.getElementById('hidden-verdict').value = verdict;
-
-  // Show lead capture form
-  document.getElementById('lead-form').classList.add('show');
+function buildRec(total, secA, secB, secC) {
+  const recs = [];
+  if (secA < 6) recs.push("Implement an always-on, event-driven logging pipeline (OpenTelemetry or similar) with structured JSON log schema capturing inputs, outputs, decisions, anomalies, and model version metadata.");
+  if (secB < 6) recs.push("Upgrade log storage to WORM-compliant or cryptographically signed infrastructure. Document a formal retention policy covering full deployment lifetime plus post-sunset period.");
+  if (secC < 8) recs.push("Appoint a named AI Compliance Owner. Conduct a formal Art. 12/19 gap assessment and produce a remediation roadmap. Pre-assemble your audit package so it can be delivered within 48 hours.");
+  if (recs.length === 0) recs.push("Maintain your controls, schedule quarterly internal reviews, and track upcoming ENISA guidance updates as enforcement approaches August 2026.");
+  return recs;
 }
 
 function showFullResults() {
   document.getElementById('lead-form').style.display = 'none';
-  document.getElementById('full-results').classList.add('show');
+  const fr = document.getElementById('full-results');
+  fr.classList.add('show');
 
-  // Populate full gaps (customize as needed)
-  const fullGapsHtml = gaps.map(g => `
-    <div class="gap-card ${g.type}">
-      <h4>${g.title}</h4>
-      <p>${g.desc}</p>
-    </div>
-  `).join('');
-  document.getElementById('gaps-container').innerHTML = fullGapsHtml;
+  // Render all gaps
+  document.getElementById('gaps-container').innerHTML = window._gaps.length
+    ? window._gaps.map(g => gapCardHTML(g, false)).join('')
+    : '<p style="color:var(--grey-400); font-style:italic; padding:8px 0;">No critical gaps identified. Excellent baseline compliance posture.</p>';
+
+  // Recommendations
+  document.getElementById('rec-box').innerHTML = `
+    <h3>Recommended Next Steps</h3>
+    <ul>${window._recText.map(r => `<li>${r}</li>`).join('')}</ul>`;
 }
 
-function restart() {
-  location.reload();
+function animateCount(id, from, to, duration) {
+  const el = document.getElementById(id);
+  const start = performance.now();
+  function step(ts) {
+    const pct = Math.min((ts - start) / duration, 1);
+    el.textContent = Math.round(from + (to - from) * easeOut(pct));
+    if (pct < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
 }
+function easeOut(t) { return 1 - Math.pow(1 - t, 3); }
 
-// AJAX submission to Formspree
+function restart() { location.reload(); }
+
+// ─── Formspree submission ────────────────────────────────────────────────────
 document.getElementById('lead-capture-form').addEventListener('submit', async function(e) {
   e.preventDefault();
-  
-  const form = e.target;
   const statusEl = document.getElementById('form-status');
-  const submitBtn = document.getElementById('submit-lead');
-  
-  statusEl.textContent = 'Sending...';
-  statusEl.style.color = 'var(--blue-bright)';
-  submitBtn.disabled = true;
-  
+  const btn = document.getElementById('submit-lead');
+  statusEl.textContent = 'Sending…';
+  statusEl.style.color = 'var(--blue-glow)';
+  btn.disabled = true;
+
   try {
-    const formData = new FormData(form);
-    
-    const response = await fetch('https://formspree.io/f/your-form-id', {  // ← REPLACE WITH YOUR REAL FORMSPREE ENDPOINT
+    const res = await fetch('https://formspree.io/f/your-form-id', {  // ← Replace with your Formspree endpoint
       method: 'POST',
-      body: formData,
+      body: new FormData(e.target),
       headers: { 'Accept': 'application/json' }
     });
-    
-    if (response.ok) {
-      statusEl.textContent = 'Success! Your personalized report is on its way.';
+    if (res.ok) {
+      statusEl.textContent = '✓ Report on its way — check your inbox!';
       statusEl.style.color = 'var(--green-success)';
-      
-      setTimeout(() => {
-        document.getElementById('lead-form').style.display = 'none';
-        document.getElementById('full-results').classList.add('show');
-      }, 1800);
+      setTimeout(showFullResults, 1800);
     } else {
-      throw new Error('Submission failed – please try again.');
+      throw new Error('Submission failed — please try again.');
     }
-  } catch (error) {
-    statusEl.textContent = error.message || 'Something went wrong. Please check your email and try again.';
+  } catch (err) {
+    statusEl.textContent = err.message;
     statusEl.style.color = 'var(--red-alert)';
-    submitBtn.disabled = false;
+    btn.disabled = false;
   }
 });
 </script>
