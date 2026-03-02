@@ -1,161 +1,219 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LXD Advisory | AI Act Infrastructure Stress Test</title>
-  
-  <meta property="og:title" content="AI Act Article 12/19 Infrastructure Stress Test">
-  <meta property="og:description" content="3-minute diagnostic for Automotive R&D: Is your AWS/SDV pipeline audit-ready for 2026?">
-  <meta property="og:image" content="https://keithan-c.github.io/scorecard/thumbnail.png"> <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --navy-bg: #0d1b2a;
-      --cyber-lime: #ccff00; /* High-contrast accent for risk */
-      --blue-bright: #2563eb;
-      --white: #ffffff;
-      --red-alert: #ef4444;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LXD Advisory | AI Act Infrastructure Stress Test</title>
+    
+    <meta property="og:title" content="EU AI Act: Article 12/19 Technical Stress Test">
+    <meta property="og:description" content="Is your SDV pipeline audit-ready for 2026? 3-minute diagnostic for Automotive R&D.">
+    <meta property="og:image" content="thumbnail.png"> 
 
-    body {
-      margin: 0;
-      font-family: 'Outfit', sans-serif;
-      background: var(--navy-bg);
-      color: var(--white);
-      line-height: 1.6;
-    }
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --navy-bg: #0d1b2a;
+            --cyber-lime: #ccff00;
+            --blue-bright: #2563eb;
+            --white: #ffffff;
+            --grey-400: #94a3b8;
+        }
 
-    .wrapper { max-width: 860px; margin: 0 auto; padding: 60px 20px; }
+        body {
+            margin: 0;
+            font-family: 'Outfit', sans-serif;
+            background: var(--navy-bg);
+            color: var(--white);
+            line-height: 1.6;
+            background-image: radial-gradient(circle at 20% 30%, #162a44 0%, var(--navy-bg) 100%);
+        }
 
-    /* ── HEADER UPGRADE ── */
-    .header-badge {
-      background: rgba(204, 255, 0, 0.1);
-      border: 1px solid var(--cyber-lime);
-      color: var(--cyber-lime);
-      padding: 6px 14px;
-      border-radius: 4px;
-      font-size: 12px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
+        .wrapper { max-width: 800px; margin: 0 auto; padding: 60px 20px; }
 
-    h1 {
-      font-family: 'DM Serif Display', serif;
-      font-size: clamp(2.2rem, 5vw, 3.5rem);
-      margin: 20px 0;
-    }
+        /* HEADER */
+        .header { text-align: center; margin-bottom: 50px; }
+        .badge {
+            background: rgba(204, 255, 0, 0.1);
+            border: 1px solid var(--cyber-lime);
+            color: var(--cyber-lime);
+            padding: 6px 15px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+        h1 { font-family: 'DM Serif Display', serif; font-size: 3rem; margin: 20px 0; line-height: 1.1; }
 
-    /* ── THE GATING OVERLAY ── */
-    .blur-overlay {
-      filter: blur(8px);
-      pointer-events: none;
-      user-select: none;
-    }
+        /* QUESTIONS */
+        .q-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); padding: 30px; border-radius: 16px; margin-bottom: 25px; }
+        .q-text { font-size: 1.2rem; font-weight: 600; margin-bottom: 10px; }
+        .q-hint { font-size: 0.9rem; color: var(--grey-400); font-style: italic; margin-bottom: 20px; }
+        
+        .option {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 15px 20px;
+            margin: 10px 0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .option:hover { background: rgba(37,99,235,0.1); border-color: var(--blue-bright); }
+        .option.selected { border-color: var(--cyber-lime); background: rgba(204,255,0,0.05); }
 
-    .lead-box {
-      background: linear-gradient(145deg, #162a44, #0d1b2a);
-      border: 2px solid var(--blue-bright);
-      padding: 40px;
-      border-radius: 20px;
-      text-align: center;
-      margin: -100px 0 40px;
-      position: relative;
-      z-index: 100;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-    }
+        /* PROGRESS */
+        .progress-container { position: sticky; top: 0; background: var(--navy-bg); padding: 10px 0; z-index: 1000; }
+        .p-bar { height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; }
+        .p-fill { height: 100%; background: var(--blue-bright); width: 0%; transition: width 0.3s; }
 
-    .cta-btn {
-      background: var(--blue-bright);
-      color: white;
-      padding: 20px 40px;
-      border-radius: 10px;
-      font-weight: 700;
-      font-size: 18px;
-      border: none;
-      cursor: pointer;
-      width: 100%;
-      transition: transform 0.2s;
-    }
+        /* RESULTS & BLUR */
+        #results-container { display: none; }
+        .blur-box { filter: blur(10px); pointer-events: none; }
+        
+        .lead-gate {
+            background: linear-gradient(145deg, #1e293b, #0f172a);
+            border: 2px solid var(--blue-bright);
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            margin-top: -150px;
+            position: relative;
+            z-index: 2000;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.6);
+        }
 
-    .cta-btn:hover { transform: scale(1.02); background: #1d4ed8; }
+        .cta-btn {
+            background: var(--blue-bright);
+            color: white;
+            border: none;
+            padding: 18px 35px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+        }
 
-    /* ── QUESTION STYLING ── */
-    .option {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.1);
-      padding: 18px;
-      margin: 12px 0;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: 0.2s;
-    }
+        .input-field {
+            width: 100%;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.2);
+            background: rgba(0,0,0,0.2);
+            color: white;
+            font-size: 1rem;
+            margin-bottom: 15px;
+        }
 
-    .option:hover { background: rgba(37,99,235,0.15); border-color: var(--blue-bright); }
-    .option.selected { border-color: var(--cyber-lime); background: rgba(204,255,0,0.05); }
-
-    /* ... Remaining styles from your previous CSS ... */
-  </style>
+        .footer { text-align: center; margin-top: 100px; color: var(--grey-400); font-size: 0.8rem; }
+    </style>
 </head>
 <body>
 
 <div class="wrapper">
-  <div id="scorecard-ui">
-    <div class="header">
-      <span class="header-badge">Enforcement Deadline: Aug 2026</span>
-      <h1>Is your SDV Pipeline<br>Audit-Ready for the AI Act?</h1>
-      <p>A technical infrastructure stress test for Automotive R&D focusing on <strong>Article 12 (Automatic Logging)</strong> and <strong>Article 19 (Log Immutability).</strong></p>
+    <div id="scorecard-ui">
+        <div class="progress-container">
+            <div class="p-bar"><div class="p-fill" id="p-fill"></div></div>
+        </div>
+
+        <div class="header">
+            <span class="badge">EU AI Act Readiness · 2026</span>
+            <h1>Article 12 & 19<br>Architecture Stress Test</h1>
+            <p>Identify critical infrastructure gaps in your SDV logging and data retention pipelines before the homologation deadline.</p>
+        </div>
+
+        <div id="questions-pool">
+            <div class="q-card" data-q="1">
+                <div class="q-text">1. Is your AI event logging fully automated and "always-on"?</div>
+                <div class="q-hint">Art. 12 mandates continuous logging during operation without manual triggers.</div>
+                <div class="option" onclick="pick(1, 3, this)">Yes – Logging is natively event-driven and automated</div>
+                <div class="option" onclick="pick(1, 1, this)">Partial – Automated in most areas, but manual gaps exist</div>
+                <div class="option" onclick="pick(1, 0, this)">No – Logging requires manual activation or is ad-hoc</div>
+            </div>
+
+            <div class="q-card" data-q="2">
+                <div class="q-text">2. Are system logs stored in a WORM (Immutable) environment?</div>
+                <div class="q-hint">Art. 19 requires that audit evidence be protected against tampering and unauthorized deletion.</div>
+                <div class="option" onclick="pick(2, 3, this)">Yes – Using S3 Object Lock, KMS Signing, or WORM hardware</div>
+                <div class="option" onclick="pick(2, 1, this)">Partial – IAM controls exist, but data is technically mutable</div>
+                <div class="option" onclick="pick(2, 0, this)">No – Standard cloud storage without integrity locks</div>
+            </div>
+
+            <div class="q-card" data-q="3">
+                <div class="q-text">3. Can you link an AI decision to a specific model version in < 60s?</div>
+                <div class="q-hint">Traceability requires model hashes and timestamps to be natively mapped in every log entry.</div>
+                <div class="option" onclick="pick(3, 3, this)">Yes – Fully indexed and searchable metadata</div>
+                <div class="option" onclick="pick(3, 1, this)">Partial – Data exists but requires manual synthesis</div>
+                <div class="option" onclick="pick(3, 0, this)">No – Logging schemas lack version-specific metadata</div>
+            </div>
+        </div>
+
+        <button class="cta-btn" onclick="finishTest()">Generate Remediation Roadmap →</button>
     </div>
 
-    <div id="question-container">
-        <div class="question-block">
-            <div class="question-text">5. Are logs protected in a WORM (Write Once, Read Many) environment?</div>
-            <div class="question-hint">Art. 19 requires integrity controls that prevent even administrators from altering records.</div>
-            <div class="option" onclick="selectOption(5,'a',3)">Yes – S3 Object Lock, KMS Signing, or physical WORM hardware</div>
-            <div class="option" onclick="selectOption(5,'b',1)">Partial – Access controls (IAM) exist, but logs remain mutable</div>
-            <div class="option" onclick="selectOption(5,'c',0)">No – Logs are stored in standard cloud/local storage</div>
+    <div id="results-ui" style="display:none;">
+        <div class="lead-gate">
+            <h2 style="color:var(--cyber-lime); margin-top:0;">Gaps Identified.</h2>
+            <p>Based on your input, your infrastructure sits at a <strong>Moderate-to-High Risk</strong> level for 2026 audits.</p>
+            <p style="font-size:0.9rem; color:var(--grey-400);">Enter your work email to unlock the full <strong>21-Day Remediation Sprint</strong> plan and technical fix guides.</p>
+            
+            <form id="lead-form" onsubmit="unlock(event)">
+                <input type="email" class="input-field" placeholder="professional.email@company.com" required>
+                <button type="submit" class="cta-btn">Unlock My Full Analysis</button>
+            </form>
+            <p style="font-size:0.7rem; color:var(--grey-400); margin-top:15px;">We only send the roadmap. No marketing spam. One-time deliverable.</p>
+        </div>
+
+        <div class="blur-box" id="final-report">
+            <h2 style="font-family: 'DM Serif Display', serif; font-size:2.5rem;">Infrastructure Readiness Report</h2>
+            <div style="background:rgba(255,255,255,0.05); padding:20px; border-radius:10px;">
+                <p><strong>Status:</strong> Critical remediation required for Article 19 compliance.</p>
+                <p><strong>Top Priority:</strong> Transition S3 buckets to Object Lock (Compliance Mode) to satisfy Immutability requirements.</p>
+                <p><strong>LXD Sprint Recommendation:</strong> Implement the 'Ghostwriter' Agentic Toolchain to automate the generation of Technical Files from raw telemetry.</p>
+            </div>
         </div>
     </div>
 
-    <button class="cta-btn" id="submit-btn" onclick="processResults()" style="margin-top:40px;">Generate My 21-Day Remediation Roadmap →</button>
-  </div>
-
-  <div id="results-ui" style="display:none;">
-    <div class="lead-box">
-      <h2 style="color:var(--cyber-lime);">Stress Test Complete.</h2>
-      <p>We've identified <strong>Critical Gaps</strong> in your Log Protection and Traceability Matrix. Enter your work email to unlock the technical fixes and your 3-week implementation sprint.</p>
-      
-      <form id="lead-form" onsubmit="unlockResults(event)">
-        <input type="email" placeholder="work.email@company.com" required style="width:100%; padding:15px; margin-bottom:15px; border-radius:8px; border:none;">
-        <button type="submit" class="cta-btn">Download Roadmap & View Gaps</button>
-      </form>
-      <p style="font-size:12px; color:#94a3b8; margin-top:10px;">Used by Tier-1 Engineering Leads to benchmark homologation readiness.</p>
+    <div class="footer">
+        Built by Keithan Cokbilir · <strong>LXD Advisory</strong> · Automotive AI Compliance Specialists
     </div>
-
-    <div class="blur-overlay" id="results-content">
-        <div class="score-display">Your Readiness Score: 42%</div>
-        <div class="gap-list">
-            <div class="gap-card">Gaps in Article 19: Missing Cryptographic Signatures...</div>
-        </div>
-    </div>
-  </div>
 </div>
 
 <script>
-    function processResults() {
+    let scores = {};
+    const totalQ = 3; // Update this to match your final question count
+
+    function pick(q, val, el) {
+        scores[q] = val;
+        // Visual selection
+        const options = el.parentElement.querySelectorAll('.option');
+        options.forEach(o => o.classList.remove('selected'));
+        el.classList.add('selected');
+        
+        // Progress
+        const count = Object.keys(scores).length;
+        document.getElementById('p-fill').style.width = (count/totalQ)*100 + '%';
+    }
+
+    function finishTest() {
+        if(Object.keys(scores).length < totalQ) {
+            alert("Please answer all questions to generate your risk profile.");
+            return;
+        }
         document.getElementById('scorecard-ui').style.display = 'none';
         document.getElementById('results-ui').style.display = 'block';
+        window.scrollTo(0,0);
     }
 
-    function unlockResults(e) {
+    function unlock(e) {
         e.preventDefault();
-        // Here you would integrate your email collection (e.g. Formspree or a Lambda)
-        document.getElementById('results-content').classList.remove('blur-overlay');
-        document.querySelector('.lead-box').style.display = 'none';
-        alert("Roadmap sent to your email. You can now view the full diagnostic.");
+        document.getElementById('final-report').classList.remove('blur-box');
+        document.querySelector('.lead-gate').style.display = 'none';
+        // Suggestion: Connect this to Formspree.io to actually receive the emails
+        alert("Roadmap Unlocked. The LXD 21-Day Sprint Plan is now visible.");
     }
-
-    // Include your points-logic and selectOption functions here
 </script>
 
 </body>
